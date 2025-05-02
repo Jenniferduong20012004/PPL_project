@@ -11,7 +11,7 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\16")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\20")
         buf.write("-\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\3\2\3\2\3\3\3\3\5\3\25\n\3\3\3\5\3\30\n\3\3\4\3\4")
         buf.write("\3\5\3\5\5\5\36\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\7\3\7\3")
@@ -23,7 +23,7 @@ def serializedATN():
         buf.write("\27\26\3\2\2\2\27\30\3\2\2\2\30\5\3\2\2\2\31\32\t\2\2")
         buf.write("\2\32\7\3\2\2\2\33\36\5\n\6\2\34\36\5\f\7\2\35\33\3\2")
         buf.write("\2\2\35\34\3\2\2\2\36\t\3\2\2\2\37 \7\r\2\2 !\7\13\2\2")
-        buf.write("!\"\7\r\2\2\"#\7\13\2\2#$\7\r\2\2$\13\3\2\2\2%&\t\3\2")
+        buf.write("!\"\7\r\2\2\"#\7\13\2\2#$\7\16\2\2$\13\3\2\2\2%&\t\3\2")
         buf.write("\2&\r\3\2\2\2\')\7\f\2\2(\'\3\2\2\2)*\3\2\2\2*(\3\2\2")
         buf.write("\2*+\3\2\2\2+\17\3\2\2\2\6\24\27\35*")
         return buf.getvalue()
@@ -43,7 +43,7 @@ class FluParser ( Parser ):
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "START", "END", "SHOW", "PREDICT", "ADD", "SLASH", 
-                      "WORD", "INT", "WS" ]
+                      "WORD", "DATE_MONTH", "YEAR", "INT", "WS" ]
 
     RULE_program = 0
     RULE_sentence = 1
@@ -67,8 +67,10 @@ class FluParser ( Parser ):
     ADD=8
     SLASH=9
     WORD=10
-    INT=11
-    WS=12
+    DATE_MONTH=11
+    YEAR=12
+    INT=13
+    WS=14
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -158,7 +160,7 @@ class FluParser ( Parser ):
             self.state = 21
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2) | (1 << FluParser.INT))) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2) | (1 << FluParser.DATE_MONTH))) != 0):
                 self.state = 20
                 self.date()
 
@@ -252,7 +254,7 @@ class FluParser ( Parser ):
             self.state = 27
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [FluParser.INT]:
+            if token in [FluParser.DATE_MONTH]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 25
                 self.dateInNum()
@@ -281,17 +283,20 @@ class FluParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def INT(self, i:int=None):
+        def DATE_MONTH(self, i:int=None):
             if i is None:
-                return self.getTokens(FluParser.INT)
+                return self.getTokens(FluParser.DATE_MONTH)
             else:
-                return self.getToken(FluParser.INT, i)
+                return self.getToken(FluParser.DATE_MONTH, i)
 
         def SLASH(self, i:int=None):
             if i is None:
                 return self.getTokens(FluParser.SLASH)
             else:
                 return self.getToken(FluParser.SLASH, i)
+
+        def YEAR(self):
+            return self.getToken(FluParser.YEAR, 0)
 
         def getRuleIndex(self):
             return FluParser.RULE_dateInNum
@@ -306,15 +311,15 @@ class FluParser ( Parser ):
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 29
-            self.match(FluParser.INT)
+            self.match(FluParser.DATE_MONTH)
             self.state = 30
             self.match(FluParser.SLASH)
             self.state = 31
-            self.match(FluParser.INT)
+            self.match(FluParser.DATE_MONTH)
             self.state = 32
             self.match(FluParser.SLASH)
             self.state = 33
-            self.match(FluParser.INT)
+            self.match(FluParser.YEAR)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
