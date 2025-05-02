@@ -1,0 +1,15 @@
+T__0=1
+T__1=2
+T__2=3
+START=4
+END=5
+SHOW=6
+PREDICT=7
+ADD=8
+SLASH=9
+WORD=10
+INT=11
+WS=12
+'tomorrow'=1
+'today'=2
+'yesterday'=3

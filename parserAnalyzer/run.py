@@ -6,9 +6,9 @@ from antlr4 import *
 
 # Define your variables
 DIR = os.path.dirname(__file__)
-ANTLR_JAR = 'PPL_project/antlr_lib/antlr4-4.9.2-complete.jar'
-CPL_Dest = 'CompiledFiles'
-SRC = 'Flu.g4'
+ANTLR_JAR = os.path.join(DIR, 'antlr4-4.9.2-complete.jar')
+CPL_Dest = os.path.join(DIR,'CompiledFiles')
+SRC = os.path.join(DIR,'Flu.g4')
 TESTS = os.path.join(DIR, './tests')
 
 

@@ -1,5 +1,17 @@
 grammar Flu;      
 program: sentence;
-sentence: ;
-
+sentence: verb (phrase)? (date)?;
+verb: START| END| SHOW| PREDICT| ADD;
+START: 'start'| 'Start';
+END: 'End'| 'end';
+SHOW: 'show'| 'Show';
+PREDICT: 'predict'|'Predict';
+ADD: 'Add'| 'add';
+date: dateInNum | dateInWord;
+dateInNum: INT SLASH INT SLASH INT;
+SLASH : '/'|'-';
+dateInWord: 'tomorrow'|'today'|'yesterday';
+phrase: WORD+;
+WORD: [a-z]+;
+INT: [0-9];
 WS: [ \t\r\n]+ -> skip;
