@@ -38,7 +38,7 @@ def runTest():
             print(f"Input rejected: {msg}")
             exit(1)  # Exit the program with an error
 
-    filename = '001.txt'
+    filename = '002.txt'
     inputFile = os.path.join(DIR, './tests', filename)    
 
     print('List of token: ')
