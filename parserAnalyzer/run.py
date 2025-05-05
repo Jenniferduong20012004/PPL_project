@@ -13,7 +13,7 @@ TESTS = os.path.join(DIR, './tests')
 
 
 def printUsage():
-    print('python run.py gen')
+    print('python parserAnalyzer/run.py gen')
     print('python run.py test')
 
 
