@@ -4,90 +4,73 @@ program: sentence;
 
 sentence: require | ask;
 
-require: verb (phrase)? (ON)? (date)?;
+require: verb (phrase)? (ON|IN)? (date)?;
 
-ask: WHAT (IS)? TM (cycleStatus | specificPharse) QUESTIONMARK;
+ask: WHAT (IS)? TM? (cycleStatus | specificPharse) QUESTIONMARK;
 
-TM: THE|MY;
-
-verb: START| END| SHOW;
+verb: START | END | SHOW;
 
 phrase: (OVU | PER | FER | NONF)  CYCLE;
 
-STATUS: 'status';
+cycleStatus: CYCLE STATUS (ON|IN)? date;
 
-date: dateInNum | dateInWord | dateNumAndWord | dateCompare; 
+specificPharse : (OVU | PER | FER | NONF) (DAYS)? (ON|IN)? dateMonth;
 
-dateNumAndWord: DATE_MONTH MONTH (YEAR)?;
+date: dateInNum | dateNumAndWord | dateInWord | dateCompare;
 
 dateInNum: DATE_MONTH SLASH DATE_MONTH (SLASH YEAR)?;
-
+dateNumAndWord: DATE_MONTH MONTH (YEAR)?;
 dateInWord: 'tomorrow'|'today'|'yesterday';
-
-dateCompare: Number DAYS BeforeAfter;
-
-WHAT: 'what'|'What';
-
-IS: 'is';
-
-THE: 'the';
-
-cycleStatus: CYCLE STATUS (ON)? date;
-
-specificPharse : (OVU | PER | FER | NONF) (DAYS)? (ON)? dateMonth;
-
-Number: INT;
-
-DAYS: 'days';
-
-BeforeAfter: BEFORE|AFTER;
-
-BEFORE: 'before';
-
-AFTER: 'later';
-
-MONTH: 'JAN'| 'FEB'| 'MAR'| 'APRIL'|'MAY'|'JUNE'|'JULY'|'AUG'|'SEP'|'OCT'|'NOV'|'DEC';
-
-SLASH : '/'|'-';
-
-WORD: [a-z]+;
-
-DATE_MONTH: INT | INT INT;
-
-YEAR: INT INT INT INT;
-
-INT: [0-9]+;
-
-QUESTIONMARK: '?';
+dateCompare: NUMBER DAYS BeforeAfter;
 
 dateMonth: monthWord| monthCompare;
 
 monthWord: WHEN MO;
+monthCompare: NUMBER MO BeforeAfter;
 
-WHEN: 'this'|'previous'|'next';
+WHAT: 'what'|'What';
+TM: THE|MY;
+IS: 'is';
+THE: 'the';
+MY: 'my';
 
-monthCompare: Number MO BeforeAfter;
+STATUS: 'status';
 
+BeforeAfter: BEFORE|AFTER;
+
+BEFORE: 'before';
+AFTER: 'later';
+
+SLASH : '/'|'-';
+
+NUMBER: [0-9]+;
+DATE_MONTH: INT | INT INT;
+YEAR: INT INT INT INT;
+INT: [0-9];
+
+
+MONTH: 'JAN'| 'FEB'| 'MAR'| 'APRIL'|'MAY'|'JUNE'|'JULY'|'AUG'|'SEP'|'OCT'|'NOV'|'DEC';
 MO: 'month'|'months';
 
+DAYS: 'days';
+
+QUESTIONMARK: '?';
+
 PER: 'period';
-
 OVU: 'ovulation';
-
 FER: 'fertile';
-
 NONF: 'non-fertile';
-
 CYCLE: 'cycle';
 
 START: 'start'| 'Start';
-
 END: 'End'| 'end';
-
 SHOW: 'show'| 'Show';
 
 ON: 'on';
+IN: 'in';
 
-MY: 'my';
+WHEN: 'this'|'previous'|'next';
+
+WORD: [a-z]+;
 
 WS: [ \t\r\n]+ -> skip; 
