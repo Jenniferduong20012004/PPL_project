@@ -16,10 +16,10 @@ cycleStatus: CYCLE STATUS (ON|IN)? date;
 
 specificPharse : (OVU | PER | FER | NONF) (DAYS)? (ON|IN)? dateMonth;
 
-date: dateInNum | dateNumAndWord | dateInWord | dateCompare;
+date: (dateCompare| dateInNum| dateInWord);
 
-dateInNum: DATE_MONTH SLASH DATE_MONTH (SLASH YEAR)?;
-dateNumAndWord: DATE_MONTH MONTH (YEAR)?;
+dateInNum: NUMBER SLASH NUMBER SLASH NUMBER;
+
 dateInWord: 'tomorrow'|'today'|'yesterday';
 dateCompare: NUMBER DAYS BeforeAfter;
 
@@ -41,15 +41,10 @@ BeforeAfter: BEFORE|AFTER;
 BEFORE: 'before';
 AFTER: 'later';
 
-SLASH : '/'|'-';
+SLASH : '-';
 
 NUMBER: [0-9]+;
-DATE_MONTH: INT | INT INT;
-YEAR: INT INT INT INT;
-INT: [0-9];
 
-
-MONTH: 'JAN'| 'FEB'| 'MAR'| 'APRIL'|'MAY'|'JUNE'|'JULY'|'AUG'|'SEP'|'OCT'|'NOV'|'DEC';
 MO: 'month'|'months';
 
 DAYS: 'days';

@@ -1,4 +1,4 @@
-# Generated from C:\Users\TRINH\OneDrive\Máy tính\ppl_project\PPL_project\parserAnalyzer\Flu.g4 by ANTLR 4.9.2
+# Generated from F:\\PPL\\PPL_project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -11,44 +11,41 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3$")
-        buf.write("x\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3 ")
+        buf.write("o\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
         buf.write("\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16\t")
-        buf.write("\16\4\17\t\17\4\20\t\20\4\21\t\21\3\2\3\2\3\3\3\3\5\3")
-        buf.write("\'\n\3\3\4\3\4\5\4+\n\4\3\4\5\4.\n\4\3\4\5\4\61\n\4\3")
-        buf.write("\5\3\5\5\5\65\n\5\3\5\5\58\n\5\3\5\3\5\5\5<\n\5\3\5\3")
-        buf.write("\5\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\5\bH\n\b\3\b\3\b\3")
-        buf.write("\t\3\t\5\tN\n\t\3\t\5\tQ\n\t\3\t\3\t\3\n\3\n\3\n\3\n\5")
-        buf.write("\nY\n\n\3\13\3\13\3\13\3\13\3\13\5\13`\n\13\3\f\3\f\3")
-        buf.write("\f\5\fe\n\f\3\r\3\r\3\16\3\16\3\16\3\16\3\17\3\17\5\17")
-        buf.write("o\n\17\3\20\3\20\3\20\3\21\3\21\3\21\3\21\3\21\2\2\22")
-        buf.write("\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \2\6\3\2 !\3\2")
-        buf.write("\35\37\3\2\30\33\3\2\3\5\2w\2\"\3\2\2\2\4&\3\2\2\2\6(")
-        buf.write("\3\2\2\2\b\62\3\2\2\2\n?\3\2\2\2\fA\3\2\2\2\16D\3\2\2")
-        buf.write("\2\20K\3\2\2\2\22X\3\2\2\2\24Z\3\2\2\2\26a\3\2\2\2\30")
-        buf.write("f\3\2\2\2\32h\3\2\2\2\34n\3\2\2\2\36p\3\2\2\2 s\3\2\2")
-        buf.write("\2\"#\5\4\3\2#\3\3\2\2\2$\'\5\6\4\2%\'\5\b\5\2&$\3\2\2")
-        buf.write("\2&%\3\2\2\2\'\5\3\2\2\2(*\5\n\6\2)+\5\f\7\2*)\3\2\2\2")
-        buf.write("*+\3\2\2\2+-\3\2\2\2,.\t\2\2\2-,\3\2\2\2-.\3\2\2\2.\60")
-        buf.write("\3\2\2\2/\61\5\22\n\2\60/\3\2\2\2\60\61\3\2\2\2\61\7\3")
-        buf.write("\2\2\2\62\64\7\6\2\2\63\65\7\b\2\2\64\63\3\2\2\2\64\65")
-        buf.write("\3\2\2\2\65\67\3\2\2\2\668\7\7\2\2\67\66\3\2\2\2\678\3")
-        buf.write("\2\2\28;\3\2\2\29<\5\16\b\2:<\5\20\t\2;9\3\2\2\2;:\3\2")
-        buf.write("\2\2<=\3\2\2\2=>\7\27\2\2>\t\3\2\2\2?@\t\3\2\2@\13\3\2")
-        buf.write("\2\2AB\t\4\2\2BC\7\34\2\2C\r\3\2\2\2DE\7\34\2\2EG\7\13")
-        buf.write("\2\2FH\t\2\2\2GF\3\2\2\2GH\3\2\2\2HI\3\2\2\2IJ\5\22\n")
-        buf.write("\2J\17\3\2\2\2KM\t\4\2\2LN\7\26\2\2ML\3\2\2\2MN\3\2\2")
-        buf.write("\2NP\3\2\2\2OQ\t\2\2\2PO\3\2\2\2PQ\3\2\2\2QR\3\2\2\2R")
-        buf.write("S\5\34\17\2S\21\3\2\2\2TY\5\24\13\2UY\5\26\f\2VY\5\30")
-        buf.write("\r\2WY\5\32\16\2XT\3\2\2\2XU\3\2\2\2XV\3\2\2\2XW\3\2\2")
-        buf.write("\2Y\23\3\2\2\2Z[\7\21\2\2[\\\7\17\2\2\\_\7\21\2\2]^\7")
-        buf.write("\17\2\2^`\7\22\2\2_]\3\2\2\2_`\3\2\2\2`\25\3\2\2\2ab\7")
-        buf.write("\21\2\2bd\7\24\2\2ce\7\22\2\2dc\3\2\2\2de\3\2\2\2e\27")
-        buf.write("\3\2\2\2fg\t\5\2\2g\31\3\2\2\2hi\7\20\2\2ij\7\26\2\2j")
-        buf.write("k\7\f\2\2k\33\3\2\2\2lo\5\36\20\2mo\5 \21\2nl\3\2\2\2")
-        buf.write("nm\3\2\2\2o\35\3\2\2\2pq\7\"\2\2qr\7\25\2\2r\37\3\2\2")
-        buf.write("\2st\7\20\2\2tu\7\25\2\2uv\7\f\2\2v!\3\2\2\2\20&*-\60")
-        buf.write("\64\67;GMPX_dn")
+        buf.write("\16\4\17\t\17\4\20\t\20\3\2\3\2\3\3\3\3\5\3%\n\3\3\4\3")
+        buf.write("\4\5\4)\n\4\3\4\5\4,\n\4\3\4\5\4/\n\4\3\5\3\5\5\5\63\n")
+        buf.write("\5\3\5\5\5\66\n\5\3\5\3\5\5\5:\n\5\3\5\3\5\3\6\3\6\3\7")
+        buf.write("\3\7\3\7\3\b\3\b\3\b\5\bF\n\b\3\b\3\b\3\t\3\t\5\tL\n\t")
+        buf.write("\3\t\5\tO\n\t\3\t\3\t\3\n\3\n\3\n\5\nV\n\n\3\13\3\13\3")
+        buf.write("\13\3\13\3\13\3\13\3\f\3\f\3\r\3\r\3\r\3\r\3\16\3\16\5")
+        buf.write("\16f\n\16\3\17\3\17\3\17\3\20\3\20\3\20\3\20\3\20\2\2")
+        buf.write("\21\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36\2\6\3\2\34")
+        buf.write("\35\3\2\31\33\3\2\24\27\3\2\3\5\2l\2 \3\2\2\2\4$\3\2\2")
+        buf.write("\2\6&\3\2\2\2\b\60\3\2\2\2\n=\3\2\2\2\f?\3\2\2\2\16B\3")
+        buf.write("\2\2\2\20I\3\2\2\2\22U\3\2\2\2\24W\3\2\2\2\26]\3\2\2\2")
+        buf.write("\30_\3\2\2\2\32e\3\2\2\2\34g\3\2\2\2\36j\3\2\2\2 !\5\4")
+        buf.write("\3\2!\3\3\2\2\2\"%\5\6\4\2#%\5\b\5\2$\"\3\2\2\2$#\3\2")
+        buf.write("\2\2%\5\3\2\2\2&(\5\n\6\2\')\5\f\7\2(\'\3\2\2\2()\3\2")
+        buf.write("\2\2)+\3\2\2\2*,\t\2\2\2+*\3\2\2\2+,\3\2\2\2,.\3\2\2\2")
+        buf.write("-/\5\22\n\2.-\3\2\2\2./\3\2\2\2/\7\3\2\2\2\60\62\7\6\2")
+        buf.write("\2\61\63\7\b\2\2\62\61\3\2\2\2\62\63\3\2\2\2\63\65\3\2")
+        buf.write("\2\2\64\66\7\7\2\2\65\64\3\2\2\2\65\66\3\2\2\2\669\3\2")
+        buf.write("\2\2\67:\5\16\b\28:\5\20\t\29\67\3\2\2\298\3\2\2\2:;\3")
+        buf.write("\2\2\2;<\7\23\2\2<\t\3\2\2\2=>\t\3\2\2>\13\3\2\2\2?@\t")
+        buf.write("\4\2\2@A\7\30\2\2A\r\3\2\2\2BC\7\30\2\2CE\7\13\2\2DF\t")
+        buf.write("\2\2\2ED\3\2\2\2EF\3\2\2\2FG\3\2\2\2GH\5\22\n\2H\17\3")
+        buf.write("\2\2\2IK\t\4\2\2JL\7\22\2\2KJ\3\2\2\2KL\3\2\2\2LN\3\2")
+        buf.write("\2\2MO\t\2\2\2NM\3\2\2\2NO\3\2\2\2OP\3\2\2\2PQ\5\32\16")
+        buf.write("\2Q\21\3\2\2\2RV\5\30\r\2SV\5\24\13\2TV\5\26\f\2UR\3\2")
+        buf.write("\2\2US\3\2\2\2UT\3\2\2\2V\23\3\2\2\2WX\7\20\2\2XY\7\17")
+        buf.write("\2\2YZ\7\20\2\2Z[\7\17\2\2[\\\7\20\2\2\\\25\3\2\2\2]^")
+        buf.write("\t\5\2\2^\27\3\2\2\2_`\7\20\2\2`a\7\22\2\2ab\7\f\2\2b")
+        buf.write("\31\3\2\2\2cf\5\34\17\2df\5\36\20\2ec\3\2\2\2ed\3\2\2")
+        buf.write("\2f\33\3\2\2\2gh\7\36\2\2hi\7\21\2\2i\35\3\2\2\2jk\7\20")
+        buf.write("\2\2kl\7\21\2\2lm\7\f\2\2m\37\3\2\2\2\16$(+.\62\659EK")
+        buf.write("NUe")
         return buf.getvalue()
 
 
@@ -64,18 +61,17 @@ class FluParser ( Parser ):
 
     literalNames = [ "<INVALID>", "'tomorrow'", "'today'", "'yesterday'", 
                      "<INVALID>", "<INVALID>", "'is'", "'the'", "'my'", 
-                     "'status'", "<INVALID>", "'before'", "'later'", "<INVALID>", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                     "'status'", "<INVALID>", "'before'", "'later'", "'-'", 
                      "<INVALID>", "<INVALID>", "'days'", "'?'", "'period'", 
                      "'ovulation'", "'fertile'", "'non-fertile'", "'cycle'", 
                      "<INVALID>", "<INVALID>", "<INVALID>", "'on'", "'in'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "WHAT", "TM", "IS", "THE", "MY", "STATUS", "BeforeAfter", 
-                      "BEFORE", "AFTER", "SLASH", "NUMBER", "DATE_MONTH", 
-                      "YEAR", "INT", "MONTH", "MO", "DAYS", "QUESTIONMARK", 
-                      "PER", "OVU", "FER", "NONF", "CYCLE", "START", "END", 
-                      "SHOW", "ON", "IN", "WHEN", "WORD", "WS" ]
+                      "BEFORE", "AFTER", "SLASH", "NUMBER", "MO", "DAYS", 
+                      "QUESTIONMARK", "PER", "OVU", "FER", "NONF", "CYCLE", 
+                      "START", "END", "SHOW", "ON", "IN", "WHEN", "WORD", 
+                      "WS" ]
 
     RULE_program = 0
     RULE_sentence = 1
@@ -87,17 +83,16 @@ class FluParser ( Parser ):
     RULE_specificPharse = 7
     RULE_date = 8
     RULE_dateInNum = 9
-    RULE_dateNumAndWord = 10
-    RULE_dateInWord = 11
-    RULE_dateCompare = 12
-    RULE_dateMonth = 13
-    RULE_monthWord = 14
-    RULE_monthCompare = 15
+    RULE_dateInWord = 10
+    RULE_dateCompare = 11
+    RULE_dateMonth = 12
+    RULE_monthWord = 13
+    RULE_monthCompare = 14
 
     ruleNames =  [ "program", "sentence", "require", "ask", "verb", "phrase", 
                    "cycleStatus", "specificPharse", "date", "dateInNum", 
-                   "dateNumAndWord", "dateInWord", "dateCompare", "dateMonth", 
-                   "monthWord", "monthCompare" ]
+                   "dateInWord", "dateCompare", "dateMonth", "monthWord", 
+                   "monthCompare" ]
 
     EOF = Token.EOF
     T__0=1
@@ -114,26 +109,22 @@ class FluParser ( Parser ):
     AFTER=12
     SLASH=13
     NUMBER=14
-    DATE_MONTH=15
-    YEAR=16
-    INT=17
-    MONTH=18
-    MO=19
-    DAYS=20
-    QUESTIONMARK=21
-    PER=22
-    OVU=23
-    FER=24
-    NONF=25
-    CYCLE=26
-    START=27
-    END=28
-    SHOW=29
-    ON=30
-    IN=31
-    WHEN=32
-    WORD=33
-    WS=34
+    MO=15
+    DAYS=16
+    QUESTIONMARK=17
+    PER=18
+    OVU=19
+    FER=20
+    NONF=21
+    CYCLE=22
+    START=23
+    END=24
+    SHOW=25
+    ON=26
+    IN=27
+    WHEN=28
+    WORD=29
+    WS=30
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -167,7 +158,7 @@ class FluParser ( Parser ):
         self.enterRule(localctx, 0, self.RULE_program)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 32
+            self.state = 30
             self.sentence()
         except RecognitionException as re:
             localctx.exception = re
@@ -204,17 +195,17 @@ class FluParser ( Parser ):
         localctx = FluParser.SentenceContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_sentence)
         try:
-            self.state = 36
+            self.state = 34
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [FluParser.START, FluParser.END, FluParser.SHOW]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 34
+                self.state = 32
                 self.require()
                 pass
             elif token in [FluParser.WHAT]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 35
+                self.state = 33
                 self.ask()
                 pass
             else:
@@ -267,21 +258,21 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 38
+            self.state = 36
             self.verb()
-            self.state = 40
+            self.state = 38
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0):
-                self.state = 39
+                self.state = 37
                 self.phrase()
 
 
-            self.state = 43
+            self.state = 41
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.ON or _la==FluParser.IN:
-                self.state = 42
+                self.state = 40
                 _la = self._input.LA(1)
                 if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
@@ -290,11 +281,11 @@ class FluParser ( Parser ):
                     self.consume()
 
 
-            self.state = 46
+            self.state = 44
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2) | (1 << FluParser.NUMBER) | (1 << FluParser.DATE_MONTH))) != 0):
-                self.state = 45
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2) | (1 << FluParser.NUMBER))) != 0):
+                self.state = 43
                 self.date()
 
 
@@ -347,39 +338,39 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 48
+            self.state = 46
             self.match(FluParser.WHAT)
-            self.state = 50
+            self.state = 48
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.IS:
-                self.state = 49
+                self.state = 47
                 self.match(FluParser.IS)
 
 
-            self.state = 53
+            self.state = 51
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.TM:
-                self.state = 52
+                self.state = 50
                 self.match(FluParser.TM)
 
 
-            self.state = 57
+            self.state = 55
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [FluParser.CYCLE]:
-                self.state = 55
+                self.state = 53
                 self.cycleStatus()
                 pass
             elif token in [FluParser.PER, FluParser.OVU, FluParser.FER, FluParser.NONF]:
-                self.state = 56
+                self.state = 54
                 self.specificPharse()
                 pass
             else:
                 raise NoViableAltException(self)
 
-            self.state = 59
+            self.state = 57
             self.match(FluParser.QUESTIONMARK)
         except RecognitionException as re:
             localctx.exception = re
@@ -419,7 +410,7 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 61
+            self.state = 59
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.START) | (1 << FluParser.END) | (1 << FluParser.SHOW))) != 0)):
                 self._errHandler.recoverInline(self)
@@ -470,14 +461,14 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 63
+            self.state = 61
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 64
+            self.state = 62
             self.match(FluParser.CYCLE)
         except RecognitionException as re:
             localctx.exception = re
@@ -524,15 +515,15 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 66
+            self.state = 64
             self.match(FluParser.CYCLE)
-            self.state = 67
+            self.state = 65
             self.match(FluParser.STATUS)
-            self.state = 69
+            self.state = 67
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.ON or _la==FluParser.IN:
-                self.state = 68
+                self.state = 66
                 _la = self._input.LA(1)
                 if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
@@ -541,7 +532,7 @@ class FluParser ( Parser ):
                     self.consume()
 
 
-            self.state = 71
+            self.state = 69
             self.date()
         except RecognitionException as re:
             localctx.exception = re
@@ -597,26 +588,26 @@ class FluParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 73
+            self.state = 71
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 75
+            self.state = 73
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.DAYS:
-                self.state = 74
+                self.state = 72
                 self.match(FluParser.DAYS)
 
 
-            self.state = 78
+            self.state = 76
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==FluParser.ON or _la==FluParser.IN:
-                self.state = 77
+                self.state = 75
                 _la = self._input.LA(1)
                 if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
@@ -625,7 +616,7 @@ class FluParser ( Parser ):
                     self.consume()
 
 
-            self.state = 80
+            self.state = 78
             self.dateMonth()
         except RecognitionException as re:
             localctx.exception = re
@@ -643,20 +634,16 @@ class FluParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+        def dateCompare(self):
+            return self.getTypedRuleContext(FluParser.DateCompareContext,0)
+
+
         def dateInNum(self):
             return self.getTypedRuleContext(FluParser.DateInNumContext,0)
 
 
-        def dateNumAndWord(self):
-            return self.getTypedRuleContext(FluParser.DateNumAndWordContext,0)
-
-
         def dateInWord(self):
             return self.getTypedRuleContext(FluParser.DateInWordContext,0)
-
-
-        def dateCompare(self):
-            return self.getTypedRuleContext(FluParser.DateCompareContext,0)
 
 
         def getRuleIndex(self):
@@ -670,31 +657,23 @@ class FluParser ( Parser ):
         localctx = FluParser.DateContext(self, self._ctx, self.state)
         self.enterRule(localctx, 16, self.RULE_date)
         try:
-            self.state = 86
+            self.enterOuterAlt(localctx, 1)
+            self.state = 83
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
             if la_ == 1:
-                self.enterOuterAlt(localctx, 1)
-                self.state = 82
-                self.dateInNum()
+                self.state = 80
+                self.dateCompare()
                 pass
 
             elif la_ == 2:
-                self.enterOuterAlt(localctx, 2)
-                self.state = 83
-                self.dateNumAndWord()
+                self.state = 81
+                self.dateInNum()
                 pass
 
             elif la_ == 3:
-                self.enterOuterAlt(localctx, 3)
-                self.state = 84
+                self.state = 82
                 self.dateInWord()
-                pass
-
-            elif la_ == 4:
-                self.enterOuterAlt(localctx, 4)
-                self.state = 85
-                self.dateCompare()
                 pass
 
 
@@ -714,20 +693,17 @@ class FluParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def DATE_MONTH(self, i:int=None):
+        def NUMBER(self, i:int=None):
             if i is None:
-                return self.getTokens(FluParser.DATE_MONTH)
+                return self.getTokens(FluParser.NUMBER)
             else:
-                return self.getToken(FluParser.DATE_MONTH, i)
+                return self.getToken(FluParser.NUMBER, i)
 
         def SLASH(self, i:int=None):
             if i is None:
                 return self.getTokens(FluParser.SLASH)
             else:
                 return self.getToken(FluParser.SLASH, i)
-
-        def YEAR(self):
-            return self.getToken(FluParser.YEAR, 0)
 
         def getRuleIndex(self):
             return FluParser.RULE_dateInNum
@@ -739,75 +715,18 @@ class FluParser ( Parser ):
 
         localctx = FluParser.DateInNumContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_dateInNum)
-        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 88
-            self.match(FluParser.DATE_MONTH)
-            self.state = 89
+            self.state = 85
+            self.match(FluParser.NUMBER)
+            self.state = 86
             self.match(FluParser.SLASH)
-            self.state = 90
-            self.match(FluParser.DATE_MONTH)
-            self.state = 93
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            if _la==FluParser.SLASH:
-                self.state = 91
-                self.match(FluParser.SLASH)
-                self.state = 92
-                self.match(FluParser.YEAR)
-
-
-        except RecognitionException as re:
-            localctx.exception = re
-            self._errHandler.reportError(self, re)
-            self._errHandler.recover(self, re)
-        finally:
-            self.exitRule()
-        return localctx
-
-
-    class DateNumAndWordContext(ParserRuleContext):
-        __slots__ = 'parser'
-
-        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
-            super().__init__(parent, invokingState)
-            self.parser = parser
-
-        def DATE_MONTH(self):
-            return self.getToken(FluParser.DATE_MONTH, 0)
-
-        def MONTH(self):
-            return self.getToken(FluParser.MONTH, 0)
-
-        def YEAR(self):
-            return self.getToken(FluParser.YEAR, 0)
-
-        def getRuleIndex(self):
-            return FluParser.RULE_dateNumAndWord
-
-
-
-
-    def dateNumAndWord(self):
-
-        localctx = FluParser.DateNumAndWordContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 20, self.RULE_dateNumAndWord)
-        self._la = 0 # Token type
-        try:
-            self.enterOuterAlt(localctx, 1)
-            self.state = 95
-            self.match(FluParser.DATE_MONTH)
-            self.state = 96
-            self.match(FluParser.MONTH)
-            self.state = 98
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            if _la==FluParser.YEAR:
-                self.state = 97
-                self.match(FluParser.YEAR)
-
-
+            self.state = 87
+            self.match(FluParser.NUMBER)
+            self.state = 88
+            self.match(FluParser.SLASH)
+            self.state = 89
+            self.match(FluParser.NUMBER)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -834,11 +753,11 @@ class FluParser ( Parser ):
     def dateInWord(self):
 
         localctx = FluParser.DateInWordContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 22, self.RULE_dateInWord)
+        self.enterRule(localctx, 20, self.RULE_dateInWord)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 100
+            self.state = 91
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2))) != 0)):
                 self._errHandler.recoverInline(self)
@@ -879,14 +798,14 @@ class FluParser ( Parser ):
     def dateCompare(self):
 
         localctx = FluParser.DateCompareContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 24, self.RULE_dateCompare)
+        self.enterRule(localctx, 22, self.RULE_dateCompare)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 102
+            self.state = 93
             self.match(FluParser.NUMBER)
-            self.state = 103
+            self.state = 94
             self.match(FluParser.DAYS)
-            self.state = 104
+            self.state = 95
             self.match(FluParser.BeforeAfter)
         except RecognitionException as re:
             localctx.exception = re
@@ -921,19 +840,19 @@ class FluParser ( Parser ):
     def dateMonth(self):
 
         localctx = FluParser.DateMonthContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 26, self.RULE_dateMonth)
+        self.enterRule(localctx, 24, self.RULE_dateMonth)
         try:
-            self.state = 108
+            self.state = 99
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [FluParser.WHEN]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 106
+                self.state = 97
                 self.monthWord()
                 pass
             elif token in [FluParser.NUMBER]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 107
+                self.state = 98
                 self.monthCompare()
                 pass
             else:
@@ -970,12 +889,12 @@ class FluParser ( Parser ):
     def monthWord(self):
 
         localctx = FluParser.MonthWordContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 28, self.RULE_monthWord)
+        self.enterRule(localctx, 26, self.RULE_monthWord)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 110
+            self.state = 101
             self.match(FluParser.WHEN)
-            self.state = 111
+            self.state = 102
             self.match(FluParser.MO)
         except RecognitionException as re:
             localctx.exception = re
@@ -1011,14 +930,14 @@ class FluParser ( Parser ):
     def monthCompare(self):
 
         localctx = FluParser.MonthCompareContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 30, self.RULE_monthCompare)
+        self.enterRule(localctx, 28, self.RULE_monthCompare)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 113
+            self.state = 104
             self.match(FluParser.NUMBER)
-            self.state = 114
+            self.state = 105
             self.match(FluParser.MO)
-            self.state = 115
+            self.state = 106
             self.match(FluParser.BeforeAfter)
         except RecognitionException as re:
             localctx.exception = re
