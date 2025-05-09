@@ -13,7 +13,7 @@ TESTS = os.path.join(DIR, './tests')
 
 
 def printUsage():
-    print('python run.py gen')
+    print('python parserAnalyzer/run.py gen')
     print('python run.py test')
 
 
@@ -38,7 +38,7 @@ def runTest():
             print(f"Input rejected: {msg}")
             exit(1)  # Exit the program with an error
 
-    filename = '002.txt'
+    filename = '001.txt'
     inputFile = os.path.join(DIR, './tests', filename)    
 
     print('List of token: ')

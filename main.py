@@ -2,7 +2,7 @@ import customtkinter as ctk
 import random
 
 # Set appearance mode and default color theme
-ctk.set_appearance_mode("dark")
+ctk.set_appearance_mode("white")
 ctk.set_default_color_theme("blue")
 
 
@@ -16,20 +16,31 @@ class ChatBotApp:
         self.root.grid_columnconfigure(0, weight=1)
         self.root.grid_rowconfigure(0, weight=1)
 
+        # Add darker pink border
+        self.outer_frame = ctk.CTkFrame(self.root, fg_color="#d36c9e", corner_radius=10)
+        self.outer_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+        self.outer_frame.grid_columnconfigure(0, weight=1)
+        self.outer_frame.grid_rowconfigure(0, weight=1)
+
         # Create main frame
-        self.main_frame = ctk.CTkFrame(self.root)
+        self.main_frame = ctk.CTkFrame(self.outer_frame, fg_color="#ffeef8", corner_radius=10)
         self.main_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_rowconfigure(0, weight=1)
 
         # Chat display (Textbox)
         self.chat_display = ctk.CTkTextbox(
-            self.main_frame, height=400, wrap="word", state="disabled"
+            self.main_frame,
+            height=400,
+            wrap="word",
+            state="disabled",
+            fg_color="#fff5fa",
+            text_color="#b03060"  # soft maroon
         )
         self.chat_display.grid(row=0, column=0, padx=10, pady=(10, 5), sticky="nsew")
 
         # Input frame
-        self.input_frame = ctk.CTkFrame(self.main_frame)
+        self.input_frame = ctk.CTkFrame(self.main_frame, fg_color="#ffeef8")
         self.input_frame.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.input_frame.grid_columnconfigure(0, weight=1)
 
@@ -44,8 +55,9 @@ class ChatBotApp:
             self.input_frame,
             text="Send",
             command=self.send_message,
-            fg_color="#fb64b6",
-            hover_color="#f6339a",
+            fg_color="#fbb1d4", # pastel pink
+            hover_color="#f98fc2", # slightly darker pink
+            text_color="black"
         )
         self.send_button.grid(row=0, column=1, pady=5)
 
