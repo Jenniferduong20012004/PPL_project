@@ -1,4 +1,4 @@
-# Generated from F:\\PPL\\PPL_project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
+# Generated from C:\Users\TRINH\OneDrive\Máy tính\ppl_project\PPL_project\parserAnalyzer\Flu.g4 by ANTLR 4.9.2
 from antlr4 import *
 from io import StringIO
 import sys
