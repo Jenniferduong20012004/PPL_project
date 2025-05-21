@@ -2,8 +2,9 @@ import sys, os
 import subprocess
 import unittest
 from antlr4 import *
-
-
+from CompiledFiles.FluVisitor import FluVisitor
+from CompiledFiles.FluParser import FluParser
+from CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 # Define your variables
 DIR = os.path.dirname(__file__)
 ANTLR_JAR = os.path.join(DIR, 'antlr4-4.9.2-complete.jar')
@@ -49,7 +50,7 @@ def runTest():
         tokens.append(token.text)
         token = lexer.nextToken()
     tokens.append('<EOF>')
-    print(','.join(tokens))    
+    # print(','.join(tokens))    
 
     # test
     input_stream = FileStream(inputFile)
@@ -57,27 +58,28 @@ def runTest():
     stream = CommonTokenStream(lexer)
     parser = FluParser(stream)
     tree = parser.program()  # Start parsing at the `program` rule
-
-    # Print the parse tree (for debugging)
-    print(tree.toStringTree(recog=parser))
+    visitor = TreeToArrayVisitor()
+    result_string =tree.toStringTree(recog=parser)
+    res = visitor.getRequirementFromUser(result_string)
+    print (res)
     # end of test
 
     
     # Reset the input stream for parsing and catch the error
-    lexer = FluLexer(FileStream(inputFile))
-    token_stream = CommonTokenStream(lexer)
+    # lexer = FluLexer(FileStream(inputFile))
+    # token_stream = CommonTokenStream(lexer)
 
-    parser = FluParser(token_stream)   
-    parser.removeErrorListeners()
-    parser.addErrorListener(CustomErrorListener())    
-    try:
-        parser.program()
-        print("Input accepted")
-    except SystemExit:        
-        pass
+    # parser = FluParser(token_stream)   
+    # parser.removeErrorListeners()
+    # parser.addErrorListener(CustomErrorListener())    
+    # try:
+    #     parser.program()
+    #     print("Input accepted")
+    # except SystemExit:        
+    #     pass
     
-    printBreak()
-    print('Run tests completely')
+    # printBreak()
+    # print('Run tests completely')
 
 def main(argv):
     print('Complete jar file ANTLR  :  ' + str(ANTLR_JAR))

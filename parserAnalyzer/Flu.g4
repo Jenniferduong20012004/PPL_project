@@ -21,15 +21,19 @@ date: (dateCompare| dateInNum| dateInWord);
 dateInNum: NUMBER SLASH NUMBER SLASH NUMBER;
 
 dateInWord: 'tomorrow'|'today'|'yesterday';
+
 dateCompare: NUMBER DAYS BeforeAfter;
 
 dateMonth: monthWord| monthCompare;
 
 monthWord: WHEN MO;
+
 monthCompare: NUMBER MO BeforeAfter;
 
 WHAT: 'what'|'What';
+
 TM: THE|MY;
+
 IS: 'is';
 THE: 'the';
 MY: 'my';
