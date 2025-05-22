@@ -1,11 +1,13 @@
 from antlr4.error.ErrorListener import ErrorListener
 from antlr4 import *
+
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from parserAnalyzer.CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
+
 class CustomErrorListener(ErrorListener):
     def __init__(self):
         super().__init__()
