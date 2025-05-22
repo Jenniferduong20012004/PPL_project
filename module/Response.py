@@ -41,7 +41,13 @@ class Response():
         elif (requireOrAsk =='verb'):
             self.getRequirement (res)
     def getRequirement (self, res):
-        print ("kdbkad")
+        verb = res[0][1].lower()
+        if (verb == 'start'):
+            print ('a')
+        elif (verb =='show'):
+            print ('s')
+        elif (verb == 'end'):
+            print ('e')
     def ask (self, res):
         specificPhraseOrCycleStatus = res[1][0]
         if (specificPhraseOrCycleStatus == 'cycleStatus'):
@@ -50,7 +56,7 @@ class Response():
         else: 
             specificPhrase = res[1][1].lower().split()[0]
             if (specificPhrase== 'period'):
-                print ("alkj")
+                print (res)
             elif (specificPhrase =='ovulation'):
                 print ("ovu")
             elif (specificPhrase == 'fertile'):
