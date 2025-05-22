@@ -27,8 +27,8 @@ class Response():
         parser.addErrorListener(self.err)    
         tree = parser.program() 
         if (self.err.has_error):
-            print ("Wrong input format, please input again")
-            self.err.has_error
+            self.err.has_error = False
+            return "Wrong input format, please input again"
         else:
             self.classifySentence(tree, parser)
     def classifySentence (self, tree, parser):
