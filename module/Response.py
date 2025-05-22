@@ -37,8 +37,12 @@ class Response():
         res = visitor.getRequirementFromUser(result_string)
         requireOrAsk = res[0][0]
         if (requireOrAsk == 'ask'):
-            self.makeRequirement (res)
-    def makeRequirement (self, res):
+            self.ask (res)
+        elif (requireOrAsk =='verb'):
+            self.getRequirement (res)
+    def getRequirement (self, res):
+        print ("kdbkad")
+    def ask (self, res):
         specificPhraseOrCycleStatus = res[1][0]
         if (specificPhraseOrCycleStatus == 'cycleStatus'):
             print ("cyc")
@@ -54,10 +58,10 @@ class Response():
             elif (specificPhrase =='non-fertile'):
                 print ('non-fer')
 
-def main(argv):
+def main():
     user_input = input("Enter your sentence: ")
     responder = Response()
     success = responder.checkError(user_input)
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main()
