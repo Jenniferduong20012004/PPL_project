@@ -35,29 +35,33 @@ def runTest():
     from antlr4.error.ErrorListener import ErrorListener
 
     class CustomErrorListener(ErrorListener):
+        def __init__(self):
+            super().__init__()
+            self.has_error = False
         def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
             print(f"Input rejected: {msg}")
+            self.has_error = True
             exit(1)  # Exit the program with an error
 
-    filename = '001.txt'
+    filename = '009.txt'
     inputFile = os.path.join(DIR, './tests', filename)    
 
     print('List of token: ')
+    
     lexer = FluLexer(FileStream(inputFile))        
     tokens = []
     token = lexer.nextToken()
     while token.type != Token.EOF:
         tokens.append(token.text)
         token = lexer.nextToken()
-    tokens.append('<EOF>')
-    # print(','.join(tokens))    
+    tokens.append('<EOF>') 
 
     # test
     input_stream = FileStream(inputFile)
     lexer = FluLexer(input_stream)
     stream = CommonTokenStream(lexer)
     parser = FluParser(stream)
-    tree = parser.program()  # Start parsing at the `program` rule
+    tree = parser.program() 
     visitor = TreeToArrayVisitor()
     result_string =tree.toStringTree(recog=parser)
     res = visitor.getRequirementFromUser(result_string)
@@ -66,20 +70,21 @@ def runTest():
 
     
     # Reset the input stream for parsing and catch the error
-    # lexer = FluLexer(FileStream(inputFile))
-    # token_stream = CommonTokenStream(lexer)
+    lexer = FluLexer(FileStream(inputFile))
+    token_stream = CommonTokenStream(lexer)
 
-    # parser = FluParser(token_stream)   
-    # parser.removeErrorListeners()
-    # parser.addErrorListener(CustomErrorListener())    
-    # try:
-    #     parser.program()
-    #     print("Input accepted")
-    # except SystemExit:        
-    #     pass
-    
-    # printBreak()
-    # print('Run tests completely')
+    parser = FluParser(token_stream)   
+    parser.removeErrorListeners()
+    err = CustomErrorListener()
+    parser.addErrorListener(err)    
+    try:
+        parser.program()
+        print("Input accepted")
+    except SystemExit:     
+        pass
+    print (err.has_error)
+    printBreak()
+    print('Run tests completely')
 
 def main(argv):
     print('Complete jar file ANTLR  :  ' + str(ANTLR_JAR))

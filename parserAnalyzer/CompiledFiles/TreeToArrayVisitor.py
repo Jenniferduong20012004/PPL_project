@@ -5,7 +5,7 @@ class TreeToArrayVisitor():
     def getRequirementFromUser (self, parse_str):
         self.extract_keys(parse_str)
         filtered = [item for item in self.result if item[1] is not None]
-        print(filtered)
+        return filtered
     def extract_keys(self,parse_str):
         tokens = parse_str.replace('(', ' ( ').replace(')', ' ) ').split()
         stack = []
