@@ -32,16 +32,16 @@ class Response():
             self.err.has_error = False
             return "Wrong input format, please input again"
         else:
-            self.classifySentence(tree, parser)
+            return self.classifySentence(tree, parser)
     def classifySentence (self, tree, parser):
         visitor = TreeToArrayVisitor()
         result_string =tree.toStringTree(recog=parser)
         res = visitor.getRequirementFromUser(result_string)
         requireOrAsk = res[0][0]
         if (requireOrAsk == 'ask'):
-            self.ask (res)
+            return self.ask (res)
         elif (requireOrAsk =='verb'):
-            self.getRequirement (res)
+            return self.getRequirement (res)
     def getRequirement (self, res):
         verb = res[0][1].lower()
         if (verb == 'start'):

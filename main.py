@@ -90,7 +90,7 @@ class ChatBotApp:
 
         # Initialize chat with a welcome message
         self.add_message(
-            "Bot: Welcome to the ChatBot! Type something to start chatting."
+            "Flu: Welcome to the ChatBot! Type something to start chatting."
         )
 
     def add_message(self, message):
@@ -120,7 +120,7 @@ class ChatBotApp:
             self.add_message(f"You: {user_message}")
             # Get and display bot response
             bot_response = self.get_response(user_message)
-            self.add_message(f"Bot: {bot_response}")
+            self.add_message(f"Flu: {bot_response}")
             # Clear input
             self.user_input.delete(0, "end")
 

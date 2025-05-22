@@ -10,5 +10,9 @@ class utilFunction():
     def getPeriodForMonth(self):
         return ("nghi oi lam cho toi")
     def requireStart (self, dateType, date):
-        print (dateType)
-        return "akb"
+        if (dateType == 'dateCompare'):
+            return "aks"
+        elif (dateType == 'dateInNum'):
+            return "ajks"
+        elif (dateType =='dateInWord'):
+            return "askjd ak"
