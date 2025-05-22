@@ -1,13 +1,12 @@
 from antlr4.error.ErrorListener import ErrorListener
 from antlr4 import *
-
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from parserAnalyzer.CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
-
+from module.utilFunction import utilFunction
 class CustomErrorListener(ErrorListener):
     def __init__(self):
         super().__init__()
@@ -20,6 +19,7 @@ class Response():
     def __init__ (self):
         self.helper = TreeToArrayVisitor()
         self.err = CustomErrorListener()
+        self.utilFunction = utilFunction()
     def checkError (self, user_str):
         input_stream = InputStream(user_str) 
         lexer = FluLexer(input_stream)
@@ -45,7 +45,7 @@ class Response():
     def getRequirement (self, res):
         verb = res[0][1].lower()
         if (verb == 'start'):
-            print ('a')
+            return self.utilFunction.requireStart(res[1][0], res[1][1])
         elif (verb =='show'):
             print ('s')
         elif (verb == 'end'):
