@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import random
-
+import os
+from controller.getResponseForUser import getResponseForUser
 # Set appearance mode and default color theme
 ctk.set_appearance_mode("white")
 ctk.set_default_color_theme("blue")
@@ -8,6 +9,7 @@ ctk.set_default_color_theme("blue")
 
 class ChatBotApp:
     def __init__(self, root):
+        self.getResponse = getResponseForUser()
         self.root = root
         self.root.title("Flu Tracking ChatBot")
         self.root.geometry("500x600")
@@ -75,9 +77,9 @@ class ChatBotApp:
             ],
             "bye": ["Goodbye!", "See you later!", "Take care!"],
             "what is your name": [
-                "I'm Grok, your friendly chatbot!",
-                "Call me Grok!",
-                "I'm Grok, nice to meet you!",
+                "I'm Flu, your friendly period tracking chatbot!",
+                "Call me Flu!",
+                "I'm Flu, nice to meet you!",
             ],
             "default": [
                 "Hmm, not sure what you mean!",
@@ -101,10 +103,14 @@ class ChatBotApp:
     def get_response(self, user_message):
         """Get a response based on user input."""
         user_message = user_message.lower().strip()
+        answer = False
         for key in self.responses:
             if key in user_message:
+                answer = True
                 return random.choice(self.responses[key])
-        return random.choice(self.responses["default"])
+        if (answer== False):
+            return self.getResponse.getResponse(user_message)
+
 
     def send_message(self):
         """Handle sending a message."""
