@@ -2,12 +2,13 @@ from antlr4.error.ErrorListener import ErrorListener
 from antlr4 import *
 import sys
 import os
+import random
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from parserAnalyzer.CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
-from UtilFunction import UtilFunction
+from module.utilFunction import utilFunction
+from module.ASTGeneration import ASTGeneration
 
 
 class CustomErrorListener(ErrorListener):
@@ -23,11 +24,55 @@ class CustomErrorListener(ErrorListener):
 
 class Response:
     def __init__(self):
-        self.helper = TreeToArrayVisitor()
+        self.astGeneration = ASTGeneration()
         self.err = CustomErrorListener()
-        self.utilFunction = UtilFunction()
+        self.utilFunction = utilFunction()
+        self.responses = {
+            "hi": ["Hello! 💖", "Hey there! 🌸", "Hi! How can I help you today? 🤗"],
+            "hello": ["Hi! 😄", "Hello! What's up? 🌟", "Hey, good to see you! 💕"],
+            "how are you": [
+                "I'm doing great, thanks! How are you feeling? 💖",
+                "I'm here and ready to help! 🌸",
+                "Awesome! How's your health today? 🤗",
+            ],
+            "bye": [
+                "Goodbye! Take care! 👋💕",
+                "See you later! Stay healthy! 😊🌸",
+                "Bye! Remember to track your cycle! 💖",
+            ],
+            "what is your name": [
+                "I'm Luna, your period tracking assistant! 🌸💖",
+                "Call me Luna! I'm here to help with your health! 💕",
+                "I'm Luna, nice to meet you! 🤗🌸",
+            ],
+            "default": [
+                "Tell me more about how you're feeling! 🤔💖",
+                "I'm here to help with your period tracking! 🌸",
+                "What would you like to know about your health? 💕",
+            ],
+        }
+
+    # check for simple keyword matching first
+    def get_simple_response(self, user_message):
+        user_message = user_message.lower().strip()
+
+        for key in self.responses:
+            if key in user_message:
+                return random.choice(self.responses[key])
+
+        return None
+
+    # if input user is incorrect, return a random default response
+    def get_default_response(self):
+        return random.choice(self.responses["default"])
 
     def checkError(self, user_str):
+        # try simple response matching
+        simple_response = self.get_simple_response(user_str)
+        if simple_response:
+            return simple_response
+
+        # if no simple match, try with ANTLR parsing for correct format
         input_stream = InputStream(user_str)
         lexer = FluLexer(input_stream)
         stream = CommonTokenStream(lexer)
@@ -35,53 +80,11 @@ class Response:
         parser.removeErrorListeners()
         parser.addErrorListener(self.err)
         tree = parser.program()
+
         if self.err.has_error:
             self.err.has_error = False
-            return "Wrong input format, please input again"
+            print("aha")
+            # return "Wrong input format, please input again"
+            return self.get_default_response()
         else:
-            return self.classifySentence(tree, parser)
-
-    def classifySentence(self, tree, parser):
-        visitor = TreeToArrayVisitor()
-        result_string = tree.toStringTree(recog=parser)
-        res = visitor.getRequirementFromUser(result_string)
-        requireOrAsk = res[0][0]
-        if requireOrAsk == "ask":
-            return self.ask(res)
-        elif requireOrAsk == "verb":
-            return self.getRequirement(res)
-
-    def getRequirement(self, res):
-        verb = res[0][1].lower()
-        if verb == "start":
-            return self.utilFunction.requireStart(res[1][0], res[1][1])
-        elif verb == "show":
-            print("s")
-        elif verb == "end":
-            print("e")
-
-    def ask(self, res):
-        specificPhraseOrCycleStatus = res[1][0]
-        if specificPhraseOrCycleStatus == "cycleStatus":
-            print("cyc")
-        #    implement for get question  what is the cycle status on 01-04-2025?
-        else:
-            specificPhrase = res[1][1].lower().split()[0]
-            if specificPhrase == "period":
-                print(res)
-            elif specificPhrase == "ovulation":
-                print("ovu")
-            elif specificPhrase == "fertile":
-                print("fertule")
-            elif specificPhrase == "non-fertile":
-                print("non-fer")
-
-
-def main():
-    user_input = input("Enter your sentence: ")
-    responder = Response()
-    success = responder.checkError(user_input)
-
-
-if __name__ == "__main__":
-    main()
+            return tree.accept(self.astGeneration)
