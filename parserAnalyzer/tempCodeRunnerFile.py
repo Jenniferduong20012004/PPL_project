@@ -1,1 +1,0 @@
-generateAntlr2Python()

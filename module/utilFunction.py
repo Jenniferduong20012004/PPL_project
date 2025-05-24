@@ -42,10 +42,9 @@ class utilFunction():
 
         return predicted_days
 
-    def requireStart (self, dateType, date):
-        if (dateType == 'dateCompare'):
-            return "aks"
-        elif (dateType == 'dateInNum'):
-            return "ajks"
-        elif (dateType =='dateInWord'):
-            return "askjd ak"
+    def requireStart (self,  date):
+        # implement input start with date is accepted by mongo already (nay la cho period nha)
+        return ("phuc oi lam dum toi nha")
+    def requireEnd (self,  date):
+        # implement input end with date is accepted by mongo already (nay la cho period nha)
+        return ("phuc oi lam dum toi nha")
