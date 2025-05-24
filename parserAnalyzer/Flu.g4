@@ -4,7 +4,7 @@ program: sentence;
 
 sentence: require | ask;
 
-require: verb (phrase)? (ON|IN)? (date)?;
+require: verb (phrase)? (ON|IN)? date;
 
 ask: WHAT (IS)? TM? (cycleStatus | specificPharse) QUESTIONMARK;
 
