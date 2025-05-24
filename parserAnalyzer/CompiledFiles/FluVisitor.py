@@ -1,4 +1,4 @@
-# Generated from F:\\PPL\\PPL_project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
+# Generated from /Users/macbook/acus/PPL_project/parserAnalyzer/Flu.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .FluParser import FluParser

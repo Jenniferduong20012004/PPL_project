@@ -12,12 +12,14 @@ class utilFunction:
         self.databaseCon = Database()
 
     def getPeriodCycle(self):
-        return "phuc oi lam cho toi"
+        user_reports = self.databaseCon["user_reports"]
+        last_three_reports = list(user_reports.find().sort("created_at", -1).limit(3))
+        return last_three_reports
 
     def getPeriodForMonth(self, month: int):
         year = datetime.now().year
 
-        collection = self.db.db["user_reports"]
+        collection = self.databaseCon["user_reports"]
         last_report = collection.find_one(sort=[("created_at", -1)])
 
         if not last_report or "start_date" not in last_report:
@@ -27,7 +29,7 @@ class utilFunction:
         if isinstance(start_date, str):
             start_date = datetime.strptime(start_date, "%Y-%m-%d")
 
-        settings = self.db.db["user_settings"].find_one()
+        settings = self.databaseCon["user_settings"].find_one()
         cycle_length = settings.get("cycle_length", 29)
         period_length = settings.get("period_length", 5)
 
