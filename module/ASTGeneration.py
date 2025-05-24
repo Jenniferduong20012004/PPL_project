@@ -5,11 +5,9 @@ from datetime import datetime, timedelta
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from module.ASTutils import *
-from parserAnalyzer.CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
 from parserAnalyzer.CompiledFiles.FluVisitor import FluVisitor
-from module.utilFunction import utilFunction
 
 
 class ASTGeneration(FluVisitor):
@@ -34,9 +32,8 @@ class ASTGeneration(FluVisitor):
     def visitRequire(self, ctx: FluParser.RequireContext):
         verb = ctx.verb().accept(self)
         date = ctx.date().accept(self) if ctx.date() else None
-        phrase = ctx.phrase().accept(self)
-        print(verb, date, phrase)
-        return RequireOp(verb, date)
+        require = RequireOp(verb, date)
+        return require.action()
 
     def visitVerb(self, ctx: FluParser.VerbContext):
         if ctx.START():

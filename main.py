@@ -452,7 +452,9 @@ class LunaApp:
 
     def get_response(self, user_message):
         """Get response from AI system"""
-        return self.getResponse.getResponse(user_message)
+        userRes= self.getResponse.getResponse(user_message)
+        print (userRes)
+        return userRes
 
     def send_message(self):
         """Send message"""

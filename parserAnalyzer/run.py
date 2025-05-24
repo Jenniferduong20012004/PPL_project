@@ -4,7 +4,6 @@ import unittest
 from antlr4 import *
 from CompiledFiles.FluVisitor import FluVisitor
 from CompiledFiles.FluParser import FluParser
-from CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 
 # Define your variables
 DIR = os.path.dirname(__file__)
