@@ -1,18 +1,24 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from module.Database import Database
-class utilFunction():
+from Database import Database
+
+
+class UtilFunction:
     def __init__(self):
-        self.databaseCon = Database();
-    def  getPeriodCycle(self):
-        return ("phuc oi lam cho toi")
+        self.db = Database()
+
+    def getPeriodCycle(self):
+        collection = self.db["user_reports"]
+        last_three_reports = list(collection.find().sort("created_at", -1).limit(3))
+        return last_three_reports
+
     def getPeriodForMonth(self):
-        return ("nghi oi lam cho toi")
-    def requireStart (self, dateType, date):
-        if (dateType == 'dateCompare'):
+        return "nghi oi lam cho toi"
+
+    def requireStart(self, dateType, date):
+        if dateType == "dateCompare":
             return "aks"
-        elif (dateType == 'dateInNum'):
+        elif dateType == "dateInNum":
             return "ajks"
-        elif (dateType =='dateInWord'):
+        elif dateType == "dateInWord":
             return "askjd ak"
