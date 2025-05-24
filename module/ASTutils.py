@@ -23,6 +23,16 @@ class RequireOp:
     def action (self):
         if (self.verb == 'show'):
             return str(self.utilFunction.getPeriodCycle())
+        elif (self.verb == 'start'):
+            if (self.time == None):
+                return "Please input date"
+            else:
+                return str(self.utilFunction.requireStart(self.time))
+        elif (self.verb == 'end'):
+            if (self.time == None):
+                return "Please input date"
+            else:
+                return str (self.utilFunction.requireEnd(self.time))
 
     def to_dict(self):
         return {

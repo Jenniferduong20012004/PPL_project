@@ -32,7 +32,6 @@ class ASTGeneration(FluVisitor):
     def visitRequire(self, ctx: FluParser.RequireContext):
         verb = ctx.verb().accept(self)
         date = ctx.date().accept(self) if ctx.date() else None
-        phrase = ctx.phrase().accept(self)
         require = RequireOp(verb, date)
         return require.action()
 

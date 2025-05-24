@@ -1,13 +1,12 @@
-# Generated from /Users/macbook/acus/PPL_project/parserAnalyzer/Flu.g4 by ANTLR 4.9.2
+# Generated from F:\\PPL\\PPL_Project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
 import sys
-
 if sys.version_info[1] > 5:
-    from typing import TextIO
+	from typing import TextIO
 else:
-    from typing.io import TextIO
+	from typing.io import TextIO
 
 
 def serializedATN():
@@ -27,8 +26,8 @@ def serializedATN():
         buf.write("\2\6&\3\2\2\2\b\60\3\2\2\2\n=\3\2\2\2\f?\3\2\2\2\16B\3")
         buf.write("\2\2\2\20I\3\2\2\2\22U\3\2\2\2\24W\3\2\2\2\26]\3\2\2\2")
         buf.write("\30_\3\2\2\2\32e\3\2\2\2\34g\3\2\2\2\36j\3\2\2\2 !\5\4")
-        buf.write('\3\2!\3\3\2\2\2"%\5\6\4\2#%\5\b\5\2$"\3\2\2\2$#\3\2')
-        buf.write("\2\2%\5\3\2\2\2&(\5\n\6\2')\5\f\7\2('\3\2\2\2()\3\2")
+        buf.write("\3\2!\3\3\2\2\2\"%\5\6\4\2#%\5\b\5\2$\"\3\2\2\2$#\3\2")
+        buf.write("\2\2%\5\3\2\2\2&(\5\n\6\2\')\5\f\7\2(\'\3\2\2\2()\3\2")
         buf.write("\2\2)+\3\2\2\2*,\t\2\2\2+*\3\2\2\2+,\3\2\2\2,.\3\2\2\2")
         buf.write("-/\5\22\n\2.-\3\2\2\2./\3\2\2\2/\7\3\2\2\2\60\62\7\6\2")
         buf.write("\2\61\63\7\b\2\2\62\61\3\2\2\2\62\63\3\2\2\2\63\65\3\2")
@@ -50,80 +49,29 @@ def serializedATN():
         return buf.getvalue()
 
 
-class FluParser(Parser):
+class FluParser ( Parser ):
 
     grammarFileName = "Flu.g4"
 
     atn = ATNDeserializer().deserialize(serializedATN())
 
-    decisionsToDFA = [DFA(ds, i) for i, ds in enumerate(atn.decisionToState)]
+    decisionsToDFA = [ DFA(ds, i) for i, ds in enumerate(atn.decisionToState) ]
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [
-        "<INVALID>",
-        "'tomorrow'",
-        "'today'",
-        "'yesterday'",
-        "<INVALID>",
-        "<INVALID>",
-        "'is'",
-        "'the'",
-        "'my'",
-        "'status'",
-        "<INVALID>",
-        "'before'",
-        "'later'",
-        "'-'",
-        "<INVALID>",
-        "<INVALID>",
-        "'days'",
-        "'?'",
-        "'period'",
-        "'ovulation'",
-        "'fertile'",
-        "'non-fertile'",
-        "'cycle'",
-        "<INVALID>",
-        "<INVALID>",
-        "<INVALID>",
-        "'on'",
-        "'in'",
-    ]
+    literalNames = [ "<INVALID>", "'tomorrow'", "'today'", "'yesterday'", 
+                     "<INVALID>", "<INVALID>", "'is'", "'the'", "'my'", 
+                     "'status'", "<INVALID>", "'before'", "'later'", "'-'", 
+                     "<INVALID>", "<INVALID>", "'days'", "'?'", "'period'", 
+                     "'ovulation'", "'fertile'", "'non-fertile'", "'cycle'", 
+                     "<INVALID>", "<INVALID>", "<INVALID>", "'on'", "'in'" ]
 
-    symbolicNames = [
-        "<INVALID>",
-        "<INVALID>",
-        "<INVALID>",
-        "<INVALID>",
-        "WHAT",
-        "TM",
-        "IS",
-        "THE",
-        "MY",
-        "STATUS",
-        "BeforeAfter",
-        "BEFORE",
-        "AFTER",
-        "SLASH",
-        "NUMBER",
-        "MO",
-        "DAYS",
-        "QUESTIONMARK",
-        "PER",
-        "OVU",
-        "FER",
-        "NONF",
-        "CYCLE",
-        "START",
-        "END",
-        "SHOW",
-        "ON",
-        "IN",
-        "WHEN",
-        "WORD",
-        "WS",
-    ]
+    symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
+                      "WHAT", "TM", "IS", "THE", "MY", "STATUS", "BeforeAfter", 
+                      "BEFORE", "AFTER", "SLASH", "NUMBER", "MO", "DAYS", 
+                      "QUESTIONMARK", "PER", "OVU", "FER", "NONF", "CYCLE", 
+                      "START", "END", "SHOW", "ON", "IN", "WHEN", "WORD", 
+                      "WS" ]
 
     RULE_program = 0
     RULE_sentence = 1
@@ -141,84 +89,74 @@ class FluParser(Parser):
     RULE_monthWord = 13
     RULE_monthCompare = 14
 
-    ruleNames = [
-        "program",
-        "sentence",
-        "require",
-        "ask",
-        "verb",
-        "phrase",
-        "cycleStatus",
-        "specificPharse",
-        "date",
-        "dateInNum",
-        "dateInWord",
-        "dateCompare",
-        "dateMonth",
-        "monthWord",
-        "monthCompare",
-    ]
+    ruleNames =  [ "program", "sentence", "require", "ask", "verb", "phrase", 
+                   "cycleStatus", "specificPharse", "date", "dateInNum", 
+                   "dateInWord", "dateCompare", "dateMonth", "monthWord", 
+                   "monthCompare" ]
 
     EOF = Token.EOF
-    T__0 = 1
-    T__1 = 2
-    T__2 = 3
-    WHAT = 4
-    TM = 5
-    IS = 6
-    THE = 7
-    MY = 8
-    STATUS = 9
-    BeforeAfter = 10
-    BEFORE = 11
-    AFTER = 12
-    SLASH = 13
-    NUMBER = 14
-    MO = 15
-    DAYS = 16
-    QUESTIONMARK = 17
-    PER = 18
-    OVU = 19
-    FER = 20
-    NONF = 21
-    CYCLE = 22
-    START = 23
-    END = 24
-    SHOW = 25
-    ON = 26
-    IN = 27
-    WHEN = 28
-    WORD = 29
-    WS = 30
+    T__0=1
+    T__1=2
+    T__2=3
+    WHAT=4
+    TM=5
+    IS=6
+    THE=7
+    MY=8
+    STATUS=9
+    BeforeAfter=10
+    BEFORE=11
+    AFTER=12
+    SLASH=13
+    NUMBER=14
+    MO=15
+    DAYS=16
+    QUESTIONMARK=17
+    PER=18
+    OVU=19
+    FER=20
+    NONF=21
+    CYCLE=22
+    START=23
+    END=24
+    SHOW=25
+    ON=26
+    IN=27
+    WHEN=28
+    WORD=29
+    WS=30
 
-    def __init__(self, input: TokenStream, output: TextIO = sys.stdout):
+    def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
         self.checkVersion("4.9.2")
-        self._interp = ParserATNSimulator(
-            self, self.atn, self.decisionsToDFA, self.sharedContextCache
-        )
+        self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
-    class ProgramContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+
+
+    class ProgramContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def sentence(self):
-            return self.getTypedRuleContext(FluParser.SentenceContext, 0)
+            return self.getTypedRuleContext(FluParser.SentenceContext,0)
+
 
         def getRuleIndex(self):
             return FluParser.RULE_program
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitProgram"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitProgram" ):
                 return visitor.visitProgram(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def program(self):
 
@@ -236,29 +174,33 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class SentenceContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class SentenceContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def require(self):
-            return self.getTypedRuleContext(FluParser.RequireContext, 0)
+            return self.getTypedRuleContext(FluParser.RequireContext,0)
+
 
         def ask(self):
-            return self.getTypedRuleContext(FluParser.AskContext, 0)
+            return self.getTypedRuleContext(FluParser.AskContext,0)
+
 
         def getRuleIndex(self):
             return FluParser.RULE_sentence
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitSentence"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSentence" ):
                 return visitor.visitSentence(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def sentence(self):
 
@@ -289,23 +231,25 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class RequireContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class RequireContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def verb(self):
-            return self.getTypedRuleContext(FluParser.VerbContext, 0)
+            return self.getTypedRuleContext(FluParser.VerbContext,0)
+
 
         def phrase(self):
-            return self.getTypedRuleContext(FluParser.PhraseContext, 0)
+            return self.getTypedRuleContext(FluParser.PhraseContext,0)
+
 
         def date(self):
-            return self.getTypedRuleContext(FluParser.DateContext, 0)
+            return self.getTypedRuleContext(FluParser.DateContext,0)
+
 
         def ON(self):
             return self.getToken(FluParser.ON, 0)
@@ -316,17 +260,20 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_require
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitRequire"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitRequire" ):
                 return visitor.visitRequire(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def require(self):
 
         localctx = FluParser.RequireContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_require)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 36
@@ -334,44 +281,31 @@ class FluParser(Parser):
             self.state = 38
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((_la) & ~0x3F) == 0 and (
-                (1 << _la)
-                & (
-                    (1 << FluParser.PER)
-                    | (1 << FluParser.OVU)
-                    | (1 << FluParser.FER)
-                    | (1 << FluParser.NONF)
-                )
-            ) != 0:
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0):
                 self.state = 37
                 self.phrase()
+
 
             self.state = 41
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.ON or _la == FluParser.IN:
+            if _la==FluParser.ON or _la==FluParser.IN:
                 self.state = 40
                 _la = self._input.LA(1)
-                if not (_la == FluParser.ON or _la == FluParser.IN):
+                if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
 
+
             self.state = 44
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((_la) & ~0x3F) == 0 and (
-                (1 << _la)
-                & (
-                    (1 << FluParser.T__0)
-                    | (1 << FluParser.T__1)
-                    | (1 << FluParser.T__2)
-                    | (1 << FluParser.NUMBER)
-                )
-            ) != 0:
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2) | (1 << FluParser.NUMBER))) != 0):
                 self.state = 43
                 self.date()
+
 
         except RecognitionException as re:
             localctx.exception = re
@@ -381,12 +315,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class AskContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class AskContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -397,10 +330,12 @@ class FluParser(Parser):
             return self.getToken(FluParser.QUESTIONMARK, 0)
 
         def cycleStatus(self):
-            return self.getTypedRuleContext(FluParser.CycleStatusContext, 0)
+            return self.getTypedRuleContext(FluParser.CycleStatusContext,0)
+
 
         def specificPharse(self):
-            return self.getTypedRuleContext(FluParser.SpecificPharseContext, 0)
+            return self.getTypedRuleContext(FluParser.SpecificPharseContext,0)
+
 
         def IS(self):
             return self.getToken(FluParser.IS, 0)
@@ -411,17 +346,20 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_ask
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitAsk"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAsk" ):
                 return visitor.visitAsk(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def ask(self):
 
         localctx = FluParser.AskContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_ask)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 46
@@ -429,16 +367,18 @@ class FluParser(Parser):
             self.state = 48
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.IS:
+            if _la==FluParser.IS:
                 self.state = 47
                 self.match(FluParser.IS)
+
 
             self.state = 51
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.TM:
+            if _la==FluParser.TM:
                 self.state = 50
                 self.match(FluParser.TM)
+
 
             self.state = 55
             self._errHandler.sync(self)
@@ -464,12 +404,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class VerbContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class VerbContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -485,35 +424,25 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_verb
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitVerb"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitVerb" ):
                 return visitor.visitVerb(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def verb(self):
 
         localctx = FluParser.VerbContext(self, self._ctx, self.state)
         self.enterRule(localctx, 8, self.RULE_verb)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 59
             _la = self._input.LA(1)
-            if not (
-                (
-                    ((_la) & ~0x3F) == 0
-                    and (
-                        (1 << _la)
-                        & (
-                            (1 << FluParser.START)
-                            | (1 << FluParser.END)
-                            | (1 << FluParser.SHOW)
-                        )
-                    )
-                    != 0
-                )
-            ):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.START) | (1 << FluParser.END) | (1 << FluParser.SHOW))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -526,12 +455,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class PhraseContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class PhraseContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -553,35 +481,25 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_phrase
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitPhrase"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPhrase" ):
                 return visitor.visitPhrase(self)
             else:
                 return visitor.visitChildren(self)
 
+
+
+
     def phrase(self):
+
         localctx = FluParser.PhraseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 10, self.RULE_phrase)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 61
             _la = self._input.LA(1)
-            if not (
-                (
-                    ((_la) & ~0x3F) == 0
-                    and (
-                        (1 << _la)
-                        & (
-                            (1 << FluParser.PER)
-                            | (1 << FluParser.OVU)
-                            | (1 << FluParser.FER)
-                            | (1 << FluParser.NONF)
-                        )
-                    )
-                    != 0
-                )
-            ):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -596,12 +514,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class CycleStatusContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class CycleStatusContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -612,7 +529,8 @@ class FluParser(Parser):
             return self.getToken(FluParser.STATUS, 0)
 
         def date(self):
-            return self.getTypedRuleContext(FluParser.DateContext, 0)
+            return self.getTypedRuleContext(FluParser.DateContext,0)
+
 
         def ON(self):
             return self.getToken(FluParser.ON, 0)
@@ -623,17 +541,20 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_cycleStatus
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitCycleStatus"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCycleStatus" ):
                 return visitor.visitCycleStatus(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def cycleStatus(self):
 
         localctx = FluParser.CycleStatusContext(self, self._ctx, self.state)
         self.enterRule(localctx, 12, self.RULE_cycleStatus)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 64
@@ -643,14 +564,15 @@ class FluParser(Parser):
             self.state = 67
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.ON or _la == FluParser.IN:
+            if _la==FluParser.ON or _la==FluParser.IN:
                 self.state = 66
                 _la = self._input.LA(1)
-                if not (_la == FluParser.ON or _la == FluParser.IN):
+                if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
+
 
             self.state = 69
             self.date()
@@ -662,17 +584,17 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class SpecificPharseContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class SpecificPharseContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def dateMonth(self):
-            return self.getTypedRuleContext(FluParser.DateMonthContext, 0)
+            return self.getTypedRuleContext(FluParser.DateMonthContext,0)
+
 
         def OVU(self):
             return self.getToken(FluParser.OVU, 0)
@@ -698,36 +620,25 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_specificPharse
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitSpecificPharse"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSpecificPharse" ):
                 return visitor.visitSpecificPharse(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def specificPharse(self):
 
         localctx = FluParser.SpecificPharseContext(self, self._ctx, self.state)
         self.enterRule(localctx, 14, self.RULE_specificPharse)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 71
             _la = self._input.LA(1)
-            if not (
-                (
-                    ((_la) & ~0x3F) == 0
-                    and (
-                        (1 << _la)
-                        & (
-                            (1 << FluParser.PER)
-                            | (1 << FluParser.OVU)
-                            | (1 << FluParser.FER)
-                            | (1 << FluParser.NONF)
-                        )
-                    )
-                    != 0
-                )
-            ):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.PER) | (1 << FluParser.OVU) | (1 << FluParser.FER) | (1 << FluParser.NONF))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -735,21 +646,23 @@ class FluParser(Parser):
             self.state = 73
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.DAYS:
+            if _la==FluParser.DAYS:
                 self.state = 72
                 self.match(FluParser.DAYS)
+
 
             self.state = 76
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la == FluParser.ON or _la == FluParser.IN:
+            if _la==FluParser.ON or _la==FluParser.IN:
                 self.state = 75
                 _la = self._input.LA(1)
-                if not (_la == FluParser.ON or _la == FluParser.IN):
+                if not(_la==FluParser.ON or _la==FluParser.IN):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
                     self.consume()
+
 
             self.state = 78
             self.dateMonth()
@@ -761,32 +674,37 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class DateContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class DateContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def dateCompare(self):
-            return self.getTypedRuleContext(FluParser.DateCompareContext, 0)
+            return self.getTypedRuleContext(FluParser.DateCompareContext,0)
+
 
         def dateInNum(self):
-            return self.getTypedRuleContext(FluParser.DateInNumContext, 0)
+            return self.getTypedRuleContext(FluParser.DateInNumContext,0)
+
 
         def dateInWord(self):
-            return self.getTypedRuleContext(FluParser.DateInWordContext, 0)
+            return self.getTypedRuleContext(FluParser.DateInWordContext,0)
+
 
         def getRuleIndex(self):
             return FluParser.RULE_date
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitDate"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDate" ):
                 return visitor.visitDate(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def date(self):
 
@@ -796,7 +714,7 @@ class FluParser(Parser):
             self.enterOuterAlt(localctx, 1)
             self.state = 83
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input, 10, self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
             if la_ == 1:
                 self.state = 80
                 self.dateCompare()
@@ -812,6 +730,7 @@ class FluParser(Parser):
                 self.dateInWord()
                 pass
 
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -820,22 +739,21 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class DateInNumContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class DateInNumContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def NUMBER(self, i: int = None):
+        def NUMBER(self, i:int=None):
             if i is None:
                 return self.getTokens(FluParser.NUMBER)
             else:
                 return self.getToken(FluParser.NUMBER, i)
 
-        def SLASH(self, i: int = None):
+        def SLASH(self, i:int=None):
             if i is None:
                 return self.getTokens(FluParser.SLASH)
             else:
@@ -844,11 +762,14 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_dateInNum
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitDateInNum"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateInNum" ):
                 return visitor.visitDateInNum(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def dateInNum(self):
 
@@ -874,47 +795,37 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class DateInWordContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class DateInWordContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
+
 
         def getRuleIndex(self):
             return FluParser.RULE_dateInWord
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitDateInWord"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateInWord" ):
                 return visitor.visitDateInWord(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def dateInWord(self):
 
         localctx = FluParser.DateInWordContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_dateInWord)
-        self._la = 0  # Token type
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 91
             _la = self._input.LA(1)
-            if not (
-                (
-                    ((_la) & ~0x3F) == 0
-                    and (
-                        (1 << _la)
-                        & (
-                            (1 << FluParser.T__0)
-                            | (1 << FluParser.T__1)
-                            | (1 << FluParser.T__2)
-                        )
-                    )
-                    != 0
-                )
-            ):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FluParser.T__0) | (1 << FluParser.T__1) | (1 << FluParser.T__2))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -927,12 +838,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class DateCompareContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class DateCompareContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -948,11 +858,14 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_dateCompare
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitDateCompare"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateCompare" ):
                 return visitor.visitDateCompare(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def dateCompare(self):
 
@@ -974,29 +887,33 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class DateMonthContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class DateMonthContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
         def monthWord(self):
-            return self.getTypedRuleContext(FluParser.MonthWordContext, 0)
+            return self.getTypedRuleContext(FluParser.MonthWordContext,0)
+
 
         def monthCompare(self):
-            return self.getTypedRuleContext(FluParser.MonthCompareContext, 0)
+            return self.getTypedRuleContext(FluParser.MonthCompareContext,0)
+
 
         def getRuleIndex(self):
             return FluParser.RULE_dateMonth
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitDateMonth"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateMonth" ):
                 return visitor.visitDateMonth(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def dateMonth(self):
 
@@ -1027,12 +944,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class MonthWordContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class MonthWordContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1045,11 +961,14 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_monthWord
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitMonthWord"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMonthWord" ):
                 return visitor.visitMonthWord(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def monthWord(self):
 
@@ -1069,12 +988,11 @@ class FluParser(Parser):
             self.exitRule()
         return localctx
 
-    class MonthCompareContext(ParserRuleContext):
-        __slots__ = "parser"
 
-        def __init__(
-            self, parser, parent: ParserRuleContext = None, invokingState: int = -1
-        ):
+    class MonthCompareContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
             super().__init__(parent, invokingState)
             self.parser = parser
 
@@ -1090,11 +1008,14 @@ class FluParser(Parser):
         def getRuleIndex(self):
             return FluParser.RULE_monthCompare
 
-        def accept(self, visitor: ParseTreeVisitor):
-            if hasattr(visitor, "visitMonthCompare"):
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMonthCompare" ):
                 return visitor.visitMonthCompare(self)
             else:
                 return visitor.visitChildren(self)
+
+
+
 
     def monthCompare(self):
 
@@ -1115,3 +1036,8 @@ class FluParser(Parser):
         finally:
             self.exitRule()
         return localctx
+
+
+
+
+
