@@ -24,7 +24,7 @@ def printBreak():
 
 def generateAntlr2Python():
     print('Antlr4 is running...')
-    subprocess.run(['java', '-jar', ANTLR_JAR, '-o', CPL_Dest, '-no-listener', '-Dlanguage=Python3', SRC])
+    subprocess.run(['java', '-jar', ANTLR_JAR, '-o', CPL_Dest, '-no-listener', '-visitor', '-Dlanguage=Python3', SRC])
     print('Generate successfully')
 
 def runTest():
