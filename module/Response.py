@@ -79,5 +79,5 @@ class Response():
             return self.get_default_response()
         else:
             return tree.accept (self.astGeneration)
-            # return self.classifySentence(tree, parser)
+           
         
