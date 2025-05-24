@@ -75,6 +75,7 @@ class Response():
 
         if (self.err.has_error):
             self.err.has_error = False
+            print ("aha")
             # return "Wrong input format, please input again"
             return self.get_default_response()
         else:
