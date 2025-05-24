@@ -149,6 +149,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_program
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitProgram" ):
+                return visitor.visitProgram(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -186,6 +192,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_sentence
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSentence" ):
+                return visitor.visitSentence(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -247,6 +259,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_require
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitRequire" ):
+                return visitor.visitRequire(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -328,6 +346,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_ask
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAsk" ):
+                return visitor.visitAsk(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -400,6 +424,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_verb
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitVerb" ):
+                return visitor.visitVerb(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -450,6 +480,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_phrase
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitPhrase" ):
+                return visitor.visitPhrase(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -504,6 +540,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_cycleStatus
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCycleStatus" ):
+                return visitor.visitCycleStatus(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -578,6 +620,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_specificPharse
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitSpecificPharse" ):
+                return visitor.visitSpecificPharse(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -649,6 +697,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_date
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDate" ):
+                return visitor.visitDate(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -708,6 +762,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_dateInNum
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateInNum" ):
+                return visitor.visitDateInNum(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -746,6 +806,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_dateInWord
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateInWord" ):
+                return visitor.visitDateInWord(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -792,6 +858,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_dateCompare
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateCompare" ):
+                return visitor.visitDateCompare(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -833,6 +905,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_dateMonth
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitDateMonth" ):
+                return visitor.visitDateMonth(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -883,6 +961,12 @@ class FluParser ( Parser ):
         def getRuleIndex(self):
             return FluParser.RULE_monthWord
 
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMonthWord" ):
+                return visitor.visitMonthWord(self)
+            else:
+                return visitor.visitChildren(self)
+
 
 
 
@@ -923,6 +1007,12 @@ class FluParser ( Parser ):
 
         def getRuleIndex(self):
             return FluParser.RULE_monthCompare
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitMonthCompare" ):
+                return visitor.visitMonthCompare(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 

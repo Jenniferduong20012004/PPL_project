@@ -3,6 +3,7 @@ from antlr4 import *
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from module.ASTGeneration import ASTGeneration
 from parserAnalyzer.CompiledFiles.TreeToArrayVisitor import TreeToArrayVisitor
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
@@ -33,6 +34,7 @@ class Response():
             return "Wrong input format, please input again"
         else:
             return self.classifySentence(tree, parser)
+        
     def classifySentence (self, tree, parser):
         visitor = TreeToArrayVisitor()
         result_string =tree.toStringTree(recog=parser)
@@ -42,14 +44,17 @@ class Response():
             return self.ask (res)
         elif (requireOrAsk =='verb'):
             return self.getRequirement (res)
+        
     def getRequirement (self, res):
         verb = res[0][1].lower()
         if (verb == 'start'):
             return self.utilFunction.requireStart(res[1][0], res[1][1])
         elif (verb =='show'):
+            # phuc
             print ('s')
         elif (verb == 'end'):
             print ('e')
+            
     def ask (self, res):
         specificPhraseOrCycleStatus = res[1][0]
         if (specificPhraseOrCycleStatus == 'cycleStatus'):
