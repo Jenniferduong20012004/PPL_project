@@ -2,66 +2,76 @@ import sys
 import os
 from functools import reduce
 from datetime import datetime, timedelta
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from module.ASTutils import *
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
 from parserAnalyzer.CompiledFiles.FluVisitor import FluVisitor
-class ASTGeneration (FluVisitor):
-    def visitProgram (self, ctx: FluParser.ProgramContext):
+
+
+class ASTGeneration(FluVisitor):
+    def visitProgram(self, ctx: FluParser.ProgramContext):
         return ctx.sentence().accept(self)
+
     def visitSentence(self, ctx: FluParser.SentenceContext):
         if ctx.ask():
             return ctx.ask().accept(self)
         elif ctx.require():
             return ctx.require().accept(self)
-        
-    def visitAsk (self, ctx: FluParser.AskContext):
+
+    def visitAsk(self, ctx: FluParser.AskContext):
         if ctx.cycleStatus():
-            cycleOp =CycleStatusOp(ctx.cycleStatus.accept (self))
-            return cycleOp.action()
+            return CycleStatusOp(ctx.cycleStatus.accept(self))
         elif ctx.specificPharse():
             return
-    def visitStatus (self, ctx: FluParser.CycleStatusContext ):
+
+    def visitStatus(self, ctx: FluParser.CycleStatusContext):
         return ctx.date().accept(self)
-    def visitRequire (self, ctx: FluParser.RequireContext):
-        requireop=RequireOp (ctx.verb().accept(self), ctx.date().accept(self))
-        return requireop.action()
-    def visitVerb (self, ctx: FluParser.VerbContext):
+
+    def visitRequire(self, ctx: FluParser.RequireContext):
+        verb = ctx.verb().accept(self)
+        date = ctx.date().accept(self) if ctx.date() else None
+        phrase = ctx.phrase().accept(self)
+        require = RequireOp(verb, date)
+        return require.action()
+
+    def visitVerb(self, ctx: FluParser.VerbContext):
         if ctx.START():
             return "start"
         elif ctx.END():
             return "end"
         elif ctx.SHOW():
             return "show"
-    def visitDate(self, ctx:FluParser.DateContext):
+
+    def visitDate(self, ctx: FluParser.DateContext):
         if ctx.dateCompare():
             return ctx.dateCompare().accept(self)
         elif ctx.dateInNum():
-            return ctx.dateInNum().accept (self)
+            return ctx.dateInNum().accept(self)
         elif ctx.dateInWord():
-            return ctx.dateInWord().accept (self)
-    def visitDateInNum (self, ctx:FluParser.DateInNumContext):
+            return ctx.dateInWord().accept(self)
+
+    def visitDateInNum(self, ctx: FluParser.DateInNumContext):
         day = int(ctx.NUMBER(0).getText())
         month = int(ctx.NUMBER(1).getText())
         year = int(ctx.NUMBER(2).getText())
         return datetime(year, month, day)
-    def visitDateCompare(self, ctx:FluParser.DateCompareContext):
+
+    def visitDateCompare(self, ctx: FluParser.DateCompareContext):
         beforeAfter = ctx.BeforeAfter().getText().lower()
         now = datetime.today()
-        if (beforeAfter == 'before'):
+        if beforeAfter == "before":
             now = now - timedelta(int(ctx.NUMBER()))
-        elif (beforeAfter == 'after'):
+        elif beforeAfter == "after":
             now = now + timedelta(int(ctx.NUMBER()))
         return now
-    def visitDateInWord (self, ctx: FluParser.DateInWordContext):
+
+    def visitDateInWord(self, ctx: FluParser.DateInWordContext):
         time = ctx.getText()
         now = datetime.today()
-        if (time == 'yesterday'):
+        if time == "yesterday":
             now = now - timedelta(1)
-        elif (time == 'today'):
+        elif time == "today":
             now = now + timedelta(1)
         return now
-
-        
-        
