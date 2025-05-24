@@ -11,22 +11,22 @@ from parserAnalyzer.CompiledFiles.FluVisitor import FluVisitor
 from module.utilFunction import utilFunction
 class ASTGeneration (FluVisitor):
     def visitProgram (self, ctx: FluParser.ProgramContext):
-        return self.visitSentence(ctx.sentence)
+        return ctx.sentence().accept(self)
     def visitSentence(self, ctx: FluParser.SentenceContext):
         if ctx.ask():
-            return self.visitAsk()
+            return ctx.ask().accept(self)
         elif ctx.require():
-            return self.visitRequire()
+            return ctx.require().accept(self)
         
     def visitAsk (self, ctx: FluParser.AskContext):
         if ctx.cycleStatus():
-            return CycleStatusOp (self.visitStatus(ctx.cycleStatus))
+            return CycleStatusOp(ctx.cycleStatus.accept (self))
         elif ctx.specificPharse():
             return
     def visitStatus (self, ctx: FluParser.CycleStatusContext ):
-        return self.visitDate (ctx.date)
+        return ctx.date().accept(self)
     def visitRequire (self, ctx: FluParser.RequireContext):
-        return RequireOp (self.visitVerb(ctx.verb), self.visitDate(ctx.date))
+        return RequireOp (ctx.verb().accept(self), ctx.date().accept(self))
     def visitVerb (self, ctx: FluParser.VerbContext):
         if ctx.START():
             return "start"
@@ -35,12 +35,12 @@ class ASTGeneration (FluVisitor):
         elif ctx.SHOW():
             return "show"
     def visitDate(self, ctx:FluParser.DateContext):
-        if ctx.dateCompare:
-            return self.visitDateCompare (ctx.dateCompare)
-        elif ctx.dateInNum:
-            return self.visitDateInNum(ctx.dateInNum)
-        elif ctx.dateInWord:
-            return self.visitDateInWord(ctx.dateInWord)
+        if ctx.dateCompare():
+            return self.visitDateCompare(ctx.dateCompare())
+        elif ctx.dateInNum():
+            return self.visitDateInNum(ctx.dateInNum())
+        elif ctx.dateInWord():
+            return self.visitDateInWord(ctx.dateInWord())
     def visitDateInNum (self, ctx:FluParser.DateInNumContext):
         day = int(ctx.NUMBER(0).getText())
         month = int(ctx.NUMBER(1).getText())
@@ -59,7 +59,7 @@ class ASTGeneration (FluVisitor):
         now = datetime.today()
         if (time == 'yesterday'):
             now = now - timedelta(1)
-        elif (time == 'atoday'):
+        elif (time == 'today'):
             now = now + timedelta(1)
         return now
 
