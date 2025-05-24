@@ -36,11 +36,11 @@ class ASTGeneration (FluVisitor):
             return "show"
     def visitDate(self, ctx:FluParser.DateContext):
         if ctx.dateCompare():
-            return self.visitDateCompare(ctx.dateCompare())
+            return ctx.dateCompare().accept(self)
         elif ctx.dateInNum():
-            return self.visitDateInNum(ctx.dateInNum())
+            return ctx.dateInNum().accept (self)
         elif ctx.dateInWord():
-            return self.visitDateInWord(ctx.dateInWord())
+            return ctx.dateInWord().accept (self)
     def visitDateInNum (self, ctx:FluParser.DateInNumContext):
         day = int(ctx.NUMBER(0).getText())
         month = int(ctx.NUMBER(1).getText())

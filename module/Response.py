@@ -78,49 +78,6 @@ class Response():
             # return "Wrong input format, please input again"
             return self.get_default_response()
         else:
-            asttree = tree.accept (self.astGeneration)
+            return tree.accept (self.astGeneration)
             # return self.classifySentence(tree, parser)
         
-    def classifySentence(self, tree, parser):
-        visitor = TreeToArrayVisitor()
-        result_string =tree.toStringTree(recog=parser)
-        res = visitor.getRequirementFromUser(result_string)
-
-        requireOrAsk = res[0][0]
-        if (requireOrAsk == 'ask'):
-            return self.ask(res)
-        elif (requireOrAsk =='verb'):
-            return self.getRequirement(res)
-        
-    def getRequirement (self, res):
-        verb = res[0][1].lower()
-        if (verb == 'start'):
-            return self.utilFunction.requireStart(res[1][0], res[1][1])
-        elif (verb =='show'):
-            print ('s')
-        elif (verb == 'end'):
-            print ('e')
-
-    def ask (self, res):
-        specificPhraseOrCycleStatus = res[1][0]
-        if (specificPhraseOrCycleStatus == 'cycleStatus'):
-            print ("cyc")
-        #    implement for get question  what is the cycle status on 01-04-2025?
-        else: 
-            specificPhrase = res[1][1].lower().split()[0]
-            if (specificPhrase== 'period'):
-                print (res)
-            elif (specificPhrase =='ovulation'):
-                print ("ovu")
-            elif (specificPhrase == 'fertile'):
-                print ("fertule")
-            elif (specificPhrase =='non-fertile'):
-                print ('non-fer')
-
-def main():
-    user_input = input("Enter your sentence: ")
-    responder = Response()
-    success = responder.checkError(user_input)
-
-if __name__ == '__main__':
-    main()
