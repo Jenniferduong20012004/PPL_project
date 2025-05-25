@@ -33,7 +33,10 @@ class ASTGeneration(FluVisitor):
         verb = ctx.verb().accept(self)
         date = ctx.date().accept(self) if ctx.date() else None
         require = RequireOp(verb, date)
-        return require.action()
+        require.action()
+        result = require.to_dict()
+        print(f"visitRequire result type: {type(result)}, value: {result}")
+        return result
 
     def visitVerb(self, ctx: FluParser.VerbContext):
         if ctx.START():

@@ -452,9 +452,8 @@ class LunaApp:
 
     def get_response(self, user_message):
         """Get response from AI system"""
-        userRes= self.getResponse.getResponse(user_message)
-        print (userRes)
-        return userRes
+        response = self.getResponse.getResponse(user_message)
+        return response
 
     def send_message(self):
         """Send message"""
@@ -471,8 +470,30 @@ class LunaApp:
 
         bot_response = self.get_response(message_text)
 
+        print(f"bot_response type: {type(bot_response)}, value: {bot_response}")
+
+        if isinstance(bot_response, dict):
+            response_text = bot_response.get("result", "No result available")
+            if bot_response.get("type") == "RequireOp":
+                if (
+                    bot_response["verb"] in ["start", "end"]
+                    and bot_response["result"] is None
+                ):
+                    response_text = "Please input date"
+                elif bot_response["verb"] == "show":
+                    # Format the 'show' response
+                    result = bot_response.get("result", [])
+                    if not result:
+                        response_text = "No cycles found."
+                    else:
+                        response_text = "Cycles:\n" + "\n".join(
+                            f"- {item}" for item in result
+                        )
+        else:
+            response_text = str(bot_response)
+
         self.root.after(
-            800, lambda: self.add_message("Luna", bot_response, is_user=False)
+            800, lambda: self.add_message("Luna", response_text, is_user=False)
         )
 
 
