@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 class utilFunction:
     def __init__(self):
         self.databaseCon = Database()
+    def getCycleStatusOnDate(self, date):
+        # lay thong tin cycle bang ngay (co trong ovulation, period non fertile hay z ko nha), ngay da co the input vao mongo
+        return "lam dum tui nha phuc"
 
     def getPeriodCycle(self):
         user_reports = self.databaseCon["user_reports"]
