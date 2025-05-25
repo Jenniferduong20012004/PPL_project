@@ -8,7 +8,7 @@ from module.ASTutils import *
 from parserAnalyzer.CompiledFiles.FluLexer import FluLexer
 from parserAnalyzer.CompiledFiles.FluParser import FluParser
 from parserAnalyzer.CompiledFiles.FluVisitor import FluVisitor
-
+from dateutil.relativedelta import relativedelta
 
 class ASTGeneration(FluVisitor):
     def visitProgram(self, ctx: FluParser.ProgramContext):
@@ -22,10 +22,48 @@ class ASTGeneration(FluVisitor):
 
     def visitAsk(self, ctx: FluParser.AskContext):
         if ctx.cycleStatus():
-            return CycleStatusOp(ctx.cycleStatus.accept(self))
+            return ctx.cycleStatus().accept(self)
         elif ctx.specificPharse():
-            return
-
+            return ctx.specificPharse().accept(self)
+    def visitSpecificPharse(self, ctx: FluParser.SpecificPharseContext):
+        phrase = None
+        if ctx.OVU():
+            phrase = "ovulation"
+        elif ctx.FER():
+            phrase = "fertile"
+        elif ctx.PER():
+            phrase = "period"
+        elif ctx.NONF():
+            phrase = "non-fertile"
+        date = ctx.dateMonth().accept (self)
+        specific = SpecificPhraseOp(phrase, date)
+        return specific.action()
+    def visitDateMonth(self, ctx: FluParser.DateMonthContext):
+        if ctx.monthCompare():
+            return ctx.monthCompare().accept(self)
+        elif ctx.monthWord():
+            return ctx.monthCompare().accept(self)
+    def visitMonthWord(self, ctx: FluParser.MonthWordContext):
+        month = ctx.WHEN().getText().lower
+        now = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if month == "before":
+            now = now - relativedelta(months=1)
+        elif month == "after":
+            now = now + relativedelta(months=1)
+        return now
+    def visitMonthCompare(self, ctx: FluParser.MonthCompareContext):
+        beforeAfter = ctx.BeforeAfter().getText().lower()
+        now = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        number_of_months = int(ctx.NUMBER().getText())
+        if beforeAfter == "before":
+            now = now - relativedelta(months=number_of_months)
+        elif beforeAfter == "after":
+            now = now + relativedelta(months=number_of_months)
+        return now
+    def visitCycleStatus(self, ctx: FluParser.CycleStatusContext):
+        date = ctx.date().accept(self) if ctx.date() else None
+        cycOp = CycleStatusOp(date)
+        return cycOp.action()
     def visitStatus(self, ctx: FluParser.CycleStatusContext):
         return ctx.date().accept(self)
 
