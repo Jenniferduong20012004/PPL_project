@@ -9,15 +9,25 @@ class CycleStatusOp:
     def __init__(self, time):
         self.time = time
         self.utilFunction = utilFunction()
+        self.result = None
+
+    def to_dict(self):
+        return {
+            "type": "CycleStatusOp",
+            "time": self.time,
+            "result": self.result,
+        }
 
     def action(self):
-        return self.utilFunction.getCycleStatusOnDate(self.time)
+        self.result = self.utilFunction.getCycleStatusOnDate(self.time)
 
 
 class SpecificPhraseOp:
     def __init__(self, phrase, time):
         self.phrase = phrase
         self.time = time
+        self.utilFunction = utilFunction()
+        self.result = None
 
     def action(self):
         if self.phrase == "ovulation":
@@ -25,10 +35,17 @@ class SpecificPhraseOp:
         elif self.phrase == "fertile":
             return "phuc oi lam cho toi nay la lay phrase fertile o thang do (time)"
         elif self.phrase == "non-fertile":
-            print(self.time)
-            return "phuc oi lam cho toi nay la lay phrase non-fertile o thang do (time)"
+            self.result = self.utilFunction.getNonFertileRangeByTime(self.time)
         elif self.phrase == "period":
-            return "phuc oi lam cho toi nay la lay phrase period o thang do (time)"
+            self.result = self.utilFunction.getPeriodRangeByTime(self.time)
+
+    def to_dict(self):
+        return {
+            "type": "SpecificPhraseOp",
+            "phrase": self.phrase,
+            "time": self.time,
+            "result": self.result,
+        }
 
 
 class RequireOp:

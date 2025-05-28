@@ -502,6 +502,19 @@ class LunaApp:
                                 f"{idx}. Cycle {idx} starts at {start} and ends at {end}"
                             )
                         response_text = "Cycles:\n" + "\n".join(formatted_cycles)
+            elif bot_response.get("type") == "SpecificPhraseOp":
+                response_text = bot_response["result"]
+                phrase = bot_response["phrase"]
+                if phrase == "ovulation":
+                    response_text = "Ovulation date is not available yet. Please track your cycle first."
+                elif phrase == "fertile":
+                    response_text = "Fertile date is not available yet. Please track your cycle first."
+                elif phrase == "non-fertile":
+                    response_text = f"Non-fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}"
+                elif phrase == "period":
+                    response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}"
+            elif bot_response.get("type") == "CycleStatusOp":
+                response_text = f"Cycle status on {bot_response['time'].strftime('%d/%m/%Y')}: {bot_response['result']}"
         else:
             response_text = str(bot_response)
 
