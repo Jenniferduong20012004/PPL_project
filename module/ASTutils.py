@@ -4,6 +4,7 @@ from typing import List, Tuple
 from datetime import datetime
 from module.utilFunction import utilFunction
 
+
 class CycleStatusOp:
     def __init__(self, time):
         self.time = time
@@ -31,26 +32,29 @@ class RequireOp:
         self.verb = verb
         self.time = time
         self.utilFunction = utilFunction()
-    def action (self):
-        if (self.verb == 'show'):
-            return str(self.utilFunction.getPeriodCycle())
-        elif (self.verb == 'start'):
-            if (self.time == None):
-                return "Please input date"
+        self.result = None
+
+    def action(self):
+        if self.verb == "show":
+            self.result = self.utilFunction.getPeriodCycle()
+        elif self.verb == "start":
+            if self.time is None:
+                self.result = "Please input date"
             else:
-                return str(self.utilFunction.requireStart(self.time))
-        elif (self.verb == 'end'):
-            if (self.time == None):
-                return "Please input date"
+                self.result = self.utilFunction.requireStart(self.time)
+        elif self.verb == "end":
+            if self.time is None:
+                self.result = "Please input date"
             else:
-                return str (self.utilFunction.requireEnd(self.time))
+                self.result = self.utilFunction.requireEnd(self.time)
 
     def to_dict(self):
         return {
             "type": "RequireOp",
             "verb": self.verb,
             "time": self.time,
+            "result": self.result,
         }
 
     def __repr__(self):
-        return str(self.to_dict())
+        return self.to_dict()

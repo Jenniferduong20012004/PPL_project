@@ -86,5 +86,4 @@ class Response:
             return self.get_default_response()
         else:
             result = tree.accept(self.astGeneration)
-            print(result)
             return result
