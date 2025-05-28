@@ -69,3 +69,15 @@ class utilFunction:
         return UserReport(
             _id=latest_report["_id"], start_at=latest_report["start_at"], end_at=date
         )
+
+    def getCycleStatusOnDate(self, date):
+        cycle_status = self.databaseCon.db["user_reports"].find_one(
+            {"end_at": {"$gte": date}}
+        )
+        if not cycle_status:
+            return None
+        return UserReport(
+            _id=cycle_status["_id"],
+            start_at=cycle_status["start_at"],
+            end_at=cycle_status["end_at"],
+        )
