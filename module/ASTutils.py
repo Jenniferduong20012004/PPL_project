@@ -28,14 +28,14 @@ class RequireOp:
             self.result = self.utilFunction.getPeriodCycle()
         elif self.verb == "start":
             if self.time is None:
-                return "Please input date"
+                self.result = "Please input date"
             else:
-                return str(self.utilFunction.requireStart(self.time))
+                self.result = self.utilFunction.requireStart(self.time)
         elif self.verb == "end":
             if self.time is None:
-                return "Please input date"
+                self.result = "Please input date"
             else:
-                return str(self.utilFunction.requireEnd(self.time))
+                self.result = self.utilFunction.requireEnd(self.time)
 
     def to_dict(self):
         return {

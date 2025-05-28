@@ -35,7 +35,6 @@ class ASTGeneration(FluVisitor):
         require = RequireOp(verb, date)
         require.action()
         result = require.to_dict()
-        print(f"visitRequire result type: {type(result)}, value: {result}")
         return result
 
     def visitVerb(self, ctx: FluParser.VerbContext):

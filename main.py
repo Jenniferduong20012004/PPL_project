@@ -1,14 +1,10 @@
 import customtkinter as ctk
 
 # import tkinter as tk
-from tkinter import messagebox
-import random
-import os
 from datetime import datetime
 from controller.getResponseForUser import getResponseForUser
 
 ctk.set_appearance_mode("white")
-ctk.set_default_color_theme("blue")
 
 
 class LunaApp:
@@ -475,20 +471,37 @@ class LunaApp:
         if isinstance(bot_response, dict):
             response_text = bot_response.get("result", "No result available")
             if bot_response.get("type") == "RequireOp":
-                if (
-                    bot_response["verb"] in ["start", "end"]
-                    and bot_response["result"] is None
-                ):
+                if bot_response["result"] is None:
                     response_text = "Please input date"
+                elif bot_response["verb"] == "start":
+                    start_date = bot_response["result"].start_at
+                    if start_date:
+                        response_text = (
+                            f"Cycle started on {start_date.strftime('%d/%m/%Y')}"
+                        )
+                    else:
+                        response_text = "Cycle start date not available."
+                elif bot_response["verb"] == "end":
+                    end_date = bot_response["result"].end_at
+                    if end_date:
+                        response_text = (
+                            f"Cycle ended on {end_date.strftime('%d/%m/%Y')}"
+                        )
+                    else:
+                        response_text = "Cycle end date not available."
                 elif bot_response["verb"] == "show":
-                    # Format the 'show' response
                     result = bot_response.get("result", [])
                     if not result:
                         response_text = "No cycles found."
                     else:
-                        response_text = "Cycles:\n" + "\n".join(
-                            f"- {item}" for item in result
-                        )
+                        formatted_cycles = []
+                        for idx, item in enumerate(result, start=1):
+                            start = item["start_at"].strftime("%d/%m/%Y")
+                            end = item["end_at"].strftime("%d/%m/%Y")
+                            formatted_cycles.append(
+                                f"{idx}. Cycle {idx} starts at {start} and ends at {end}"
+                            )
+                        response_text = "Cycles:\n" + "\n".join(formatted_cycles)
         else:
             response_text = str(bot_response)
 
