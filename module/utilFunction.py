@@ -138,6 +138,7 @@ class utilFunction:
         )
 
     def getNonFertileRangeByTime(self, date: datetime):
+        now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
         )
@@ -157,14 +158,22 @@ class utilFunction:
         predicted_start = start_at
         while predicted_start <= date:
             predicted_start += timedelta(days=cycle_length)
-        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
 
-        non_fertile_start = ovulation_day - timedelta(days=5)
-        non_fertile_end = ovulation_day + timedelta(days=5)
+        predicted_end = predicted_start + timedelta(days=period_length)
+        ovulation = predicted_start + relativedelta(months=1) - timedelta (days = self.cache.get ("ovulation_offset"))
+        fertile_start = ovulation - timedelta(days=5)
+        fertile_end = ovulation + timedelta(days=1)
+        non_fertile_ranges = [
+            (predicted_start, fertile_start - timedelta(days=1)),  # Before fertile window
+            (fertile_end + timedelta(days=1), predicted_start + timedelta(days=cycle_length - 1))  # After fertile window
+        ]
+
 
         return {
-            "start_at": non_fertile_start.strftime("%d/%m/%Y"),
-            "end_at": non_fertile_end.strftime("%d/%m/%Y"),
+            "start_at": non_fertile_ranges[0][0].strftime("%d/%m/%Y"),
+            "end_at": non_fertile_ranges[0][1].strftime("%d/%m/%Y"),
+            "start_at_2": non_fertile_ranges[1][0].strftime("%d/%m/%Y"),
+            "end_at_2": non_fertile_ranges[1][1].strftime("%d/%m/%Y"),
             "reminder": "During non-fertile days—the times outside your fertile window and menstruation—your chance of pregnancy is lower but not zero, especially if your cycle is irregular. It’s still important to maintain regular contraception if you want to avoid pregnancy. Use this time to focus on overall health: stay active, eat well, and manage stress. Keep tracking your cycle to better understand your body and prepare for upcoming fertile or period days.",
         }
 

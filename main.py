@@ -521,7 +521,7 @@ class LunaApp:
                 elif phrase == "fertile":
                     response_text = f"Fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
                 elif phrase == "non-fertile":
-                    response_text = f"Non-fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
+                    response_text = f"There are 2 non-fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']} and {bot_response['result']['start_at_2']} to {bot_response['result']['end_at_2']}. {bot_response['result']['reminder']}"
                 elif phrase == "period":
                     if (bot_response['result']['second_start_at'] is None ):
                         response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
