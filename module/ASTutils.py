@@ -17,9 +17,11 @@ class SpecificPhraseOp:
     def __init__(self, phrase, time):
         self.phrase = phrase
         self.time = time
+        self.utilFunction = utilFunction()
     def action (self):
         if (self.phrase == 'ovulation'):
-            return "phuc oi lam cho toi nay la lay phrase ovulation o thang do (time)"
+            result = self.utilFunction.getOvulationWithMonth(self.time)
+            return result
         elif (self.phrase == 'fertile'):
             return "phuc oi lam cho toi nay la lay phrase fertile o thang do (time)"
         elif (self.phrase == 'non-fertile'):

@@ -8,6 +8,73 @@ from pymongo import DESCENDING
 class utilFunction:
     def __init__(self):
         self.databaseCon = Database()
+        user_reports = self.databaseCon.db["user_reports"]
+        last_three_reports = list(
+            user_reports.find().sort("start_at", DESCENDING).limit(3)
+        )
+        last_three_reports.sort(key=lambda x: x['start_at'])
+        durations = []
+        for report in last_three_reports:
+            start = report['start_at']
+            end = report['end_at']
+            if isinstance(start, str):
+                start = datetime.fromisoformat(start)
+            if isinstance(end, str):
+                end = datetime.fromisoformat(end)
+            diff_days = (end.date() - start.date()).days
+            durations.append(diff_days)
+
+        mean_duration = sum(durations) / len(durations) if durations else 0
+        
+
+        # Calculate differences between start_at of different reports
+        start_diffs = []
+        for i in range(1, len(last_three_reports)):
+            prev_start = last_three_reports[i - 1]['start_at']
+            curr_start = last_three_reports[i]['start_at']
+            if isinstance(prev_start, str):
+                prev_start = datetime.fromisoformat(prev_start)
+            if isinstance(curr_start, str):
+                curr_start = datetime.fromisoformat(curr_start)
+            diff_days = (curr_start.date() - prev_start.date()).days
+            start_diffs.append(diff_days)
+
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
+    def getOvulationWithMonth(self, time):
+        user_reports = self.databaseCon.db["user_reports"]
+        last_three_reports = list(
+            user_reports.find().sort("start_at", DESCENDING).limit(3)
+        )
+        last_three_reports.sort(key=lambda x: x['start_at'])
+        durations = []
+        for report in last_three_reports:
+            start = report['start_at']
+            end = report['end_at']
+            if isinstance(start, str):
+                start = datetime.fromisoformat(start)
+            if isinstance(end, str):
+                end = datetime.fromisoformat(end)
+            diff_days = (end.date() - start.date()).days
+            durations.append(diff_days)
+
+        mean_duration = sum(durations) / len(durations) if durations else 0
+
+        # Calculate differences between start_at of different reports
+        start_diffs = []
+        for i in range(1, len(last_three_reports)):
+            prev_start = last_three_reports[i - 1]['start_at']
+            curr_start = last_three_reports[i]['start_at']
+            if isinstance(prev_start, str):
+                prev_start = datetime.fromisoformat(prev_start)
+            if isinstance(curr_start, str):
+                curr_start = datetime.fromisoformat(curr_start)
+            diff_days = (curr_start.date() - prev_start.date()).days
+            start_diffs.append(diff_days)
+
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
+
+        print("Mean report duration:", mean_duration)
+        print("Mean start_at difference between reports:", mean_start_diff)
     def getCycleStatusOnDate(self, date):
         # lay thong tin cycle bang ngay (co trong ovulation, period non fertile hay z ko nha), ngay da co the input vao mongo
         return "lam dum tui nha phuc"
@@ -19,41 +86,6 @@ class utilFunction:
         )
         return last_three_reports
 
-    def getPeriodForMonth(self, month: int):
-        year = datetime.now().year
-
-        collection = self.databaseCon.db["user_reports"]
-        last_report = collection.find_one(sort=[("start_at", -1)])
-
-        if not last_report or "start_at" not in last_report:
-            return []
-
-        start_date = last_report["start_at"]
-        if isinstance(start_date, str):
-            start_date = datetime.strptime(start_date, "%Y-%m-%d")
-        elif isinstance(start_date, dict) and "$date" in start_date:
-            start_date = datetime.fromisoformat(
-                start_date["$date"]
-            )  # Mongo shell formats
-
-        cycle_length = 29
-        period_length = 5
-
-        # Define month boundaries
-        start_of_month = datetime(year, month, 1)
-        end_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
-
-        predicted_days = []
-        current = start_date
-
-        while current <= end_of_month:
-            for i in range(period_length):
-                day = current + timedelta(days=i)
-                if start_of_month <= day <= end_of_month:
-                    predicted_days.append(day.strftime("%d/%m/%Y"))
-            current += timedelta(days=cycle_length)
-
-        return predicted_days
 
     def requireStart(self, date):
         user_report = UserReport(start_at=date, end_at=date + timedelta(days=5))
