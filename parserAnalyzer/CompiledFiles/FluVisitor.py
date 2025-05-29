@@ -19,6 +19,16 @@ class FluVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by FluParser#symptom.
+    def visitSymptom(self, ctx:FluParser.SymptomContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FluParser#symp.
+    def visitSymp(self, ctx:FluParser.SympContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by FluParser#checkStats.
     def visitCheckStats(self, ctx:FluParser.CheckStatsContext):
         return self.visitChildren(ctx)

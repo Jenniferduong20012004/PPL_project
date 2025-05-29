@@ -3,7 +3,18 @@ from dataclasses import dataclass
 from typing import List, Tuple
 from datetime import datetime
 from module.utilFunction import utilFunction
-
+class SympOp:
+    def __init__(self, listSymp):
+        self.utilFunction = utilFunction()
+        self.listSymp = listSymp
+        self.result = None
+    def action(self):
+        self.result = self.utilFunction.getSymp(self.listSymp)
+    def to_dict(self):
+        return {
+            "type": "SympOp",
+            "result": self.result,
+        }
 class CheckOp:
     def __init__(self):
         self.utilFunction = utilFunction()
