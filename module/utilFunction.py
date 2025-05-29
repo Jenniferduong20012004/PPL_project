@@ -71,40 +71,6 @@ class utilFunction:
         self.cache['fertile_start_offset'] = fertile_start_offset
         self.cache['fertile_end_offset']= fertile_end_offset
 
-    def getOvulationWithMonth(self, time):
-        user_reports = self.databaseCon.db["user_reports"]
-        last_three_reports = list(
-            user_reports.find().sort("start_at", DESCENDING).limit(3)
-        )
-        last_three_reports.sort(key=lambda x: x['start_at'])
-        durations = []
-        for report in last_three_reports:
-            start = report['start_at']
-            end = report['end_at']
-            if isinstance(start, str):
-                start = datetime.fromisoformat(start)
-            if isinstance(end, str):
-                end = datetime.fromisoformat(end)
-            diff_days = (end.date() - start.date()).days
-            durations.append(diff_days)
-
-        mean_duration = sum(durations) / len(durations) if durations else 0
-
-        # Calculate differences between start_at of different reports
-        start_diffs = []
-        for i in range(1, len(last_three_reports)):
-            prev_start = last_three_reports[i - 1]['start_at']
-            curr_start = last_three_reports[i]['start_at']
-            if isinstance(prev_start, str):
-                prev_start = datetime.fromisoformat(prev_start)
-            if isinstance(curr_start, str):
-                curr_start = datetime.fromisoformat(curr_start)
-            diff_days = (curr_start.date() - prev_start.date()).days
-            start_diffs.append(diff_days)
-
-        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
-        # cache['key'] = 'value'  # Store
-        # print(cache['key'])     # Retrieve
         
     def getCycleStatusOnDate(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
@@ -173,24 +139,25 @@ class utilFunction:
 
     def getNonFertileRangeByTime(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
-            sort=[("start_at", DESCENDING)]
+                sort=[("start_at", DESCENDING)]
         )
         if not latest_report or "end_at" not in latest_report:
             return None
 
-        end_at = latest_report["end_at"]
-        if isinstance(end_at, str):
-            end_at = datetime.strptime(end_at, "%Y-%m-%d")
-        elif isinstance(end_at, dict) and "$date" in end_at:
-            end_at = datetime.fromisoformat(end_at["$date"])
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
 
-        delta = relativedelta(date, end_at)
-        total_months = delta.years * 12 + delta.months
-        ovulation_day = (
-            end_at
-            + relativedelta(months=+total_months)
-            + timedelta(days=self.cache.get('ovulation_offset'))
-        )
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+
+            # Keep adding cycle_length days until we pass the given date
+        predicted_start = start_at
+        while predicted_start <= date:
+            predicted_start += timedelta(days=cycle_length)
+        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
 
         non_fertile_start = ovulation_day - timedelta(days=5)
         non_fertile_end = ovulation_day + timedelta(days=5)
@@ -220,10 +187,10 @@ class utilFunction:
 
             # Keep adding cycle_length days until we pass the given date
         predicted_start = start_at
-        while predicted_start <= date:
+        while predicted_start < date:
             predicted_start += timedelta(days=cycle_length)
 
-        predicted_end = predicted_start + timedelta(days=period_length - 1)
+        predicted_end = predicted_start + timedelta(days=period_length)
 
         return {
                 "start_at": predicted_start.strftime("%d/%m/%Y"),
@@ -236,24 +203,25 @@ class utilFunction:
     
     def getOvulationRangeByTime(self,date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
-            sort=[("start_at", DESCENDING)]
+                sort=[("start_at", DESCENDING)]
         )
         if not latest_report or "end_at" not in latest_report:
             return None
 
-        end_at = latest_report["end_at"]
-        if isinstance(end_at, str):
-            end_at = datetime.strptime(end_at, "%Y-%m-%d")
-        elif isinstance(end_at, dict) and "$date" in end_at:
-            end_at = datetime.fromisoformat(end_at["$date"])
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
 
-        delta = relativedelta(date, end_at)
-        total_months = delta.years * 12 + delta.months
-        ovulation_day = (
-            end_at
-            + relativedelta(months=+total_months)
-            + timedelta(days=self.cache.get('ovulation_offset'))
-        )
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+
+            # Keep adding cycle_length days until we pass the given date
+        predicted_start = start_at
+        while predicted_start <= date:
+            predicted_start += timedelta(days=cycle_length)
+        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
 
 
         return {
@@ -262,24 +230,23 @@ class utilFunction:
         }
     def getFertileRangeByTime (self, date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
-            sort=[("start_at", DESCENDING)]
+                sort=[("start_at", DESCENDING)]
         )
         if not latest_report or "end_at" not in latest_report:
             return None
 
-        end_at = latest_report["end_at"]
-        if isinstance(end_at, str):
-            end_at = datetime.strptime(end_at, "%Y-%m-%d")
-        elif isinstance(end_at, dict) and "$date" in end_at:
-            end_at = datetime.fromisoformat(end_at["$date"])
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
 
-        delta = relativedelta(date, end_at)
-        total_months = delta.years * 12 + delta.months
-        ovulation_day = (
-            end_at
-            + relativedelta(months=+total_months)
-            + timedelta(days=self.cache.get('ovulation_offset'))
-        )
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+        predicted_start = start_at
+        while predicted_start <= date:
+            predicted_start += timedelta(days=cycle_length)
+        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
 
         fertile_start = ovulation_day - timedelta(days=5)
         fertile_end = ovulation_day
