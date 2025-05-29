@@ -187,16 +187,27 @@ class utilFunction:
 
             # Keep adding cycle_length days until we pass the given date
         predicted_start = start_at
-        while predicted_start < date:
+        while predicted_start <= date:
             predicted_start += timedelta(days=cycle_length)
 
         predicted_end = predicted_start + timedelta(days=period_length)
+        if (predicted_start + timedelta (days=cycle_length) < date + relativedelta(months=1)):
+            second_period = predicted_start + timedelta (days=cycle_length)
+            second_period_end = second_period + timedelta(days=period_length)
+            return {
+                "start_at": predicted_start.strftime("%d/%m/%Y"),
+                "end_at": predicted_end.strftime("%d/%m/%Y"),
+                "second_start_at": second_period.strftime("%d/%m/%Y"),
+                "second_end_at": second_period_end.strftime("%d/%m/%Y"),
+                "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
+            }
 
         return {
                 "start_at": predicted_start.strftime("%d/%m/%Y"),
                 "end_at": predicted_end.strftime("%d/%m/%Y"),
+                "second_start_at": None,
+                "second_end_at": None,
                 "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
-            
         }
 
 
@@ -218,14 +229,21 @@ class utilFunction:
         period_length = self.cache.get("period_length")
 
             # Keep adding cycle_length days until we pass the given date
-        predicted_start = start_at
-        while predicted_start <= date:
-            predicted_start += timedelta(days=cycle_length)
-        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
+        ovupredict = start_at-timedelta(days = self.cache.get ("ovulation_offset"))
+        while ovupredict <= date:
+            ovupredict += timedelta(days=cycle_length)
+        if (ovupredict + timedelta (days=cycle_length) < date + relativedelta(months=1)):
+            second_ovulation = ovupredict+ timedelta(days=cycle_length)
+            return {
+                "ovulation_day": ovupredict.strftime("%d/%m/%Y"),
+                "second_ovulation_day": second_ovulation.strftime("%d/%m/%Y"),
+                "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
+            }
 
 
         return {
-            "ovulation_day": ovulation_day.strftime("%d/%m/%Y"),
+            "ovulation_day": ovupredict.strftime("%d/%m/%Y"),
+            "second_ovulation_day": None,
             "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
         }
     def getFertileRangeByTime (self, date):
