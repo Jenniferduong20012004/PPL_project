@@ -2,7 +2,9 @@ grammar Flu;
 
 program: sentence;
 
-sentence: require | ask | checkStats;
+sentence: require | ask | checkStats | symptom;
+
+symptom: fee
 
 checkStats: CHECK CYCLE STATS;
 
