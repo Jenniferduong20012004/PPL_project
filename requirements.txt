@@ -6,4 +6,6 @@ dnspython==2.7.0
 dotenv==0.9.9
 packaging==25.0
 pymongo==4.12.1
+python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
+six==1.17.0
