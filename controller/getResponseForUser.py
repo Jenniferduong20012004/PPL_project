@@ -15,5 +15,5 @@ class getResponseForUser:
         response = self.response.checkError(user_str)
         return response
     def checkPeriodThisMonth(self):
-        self.utilFunction.initPeriodForMonth()
+        return self.utilFunction.initPeriodForMonth()
         
