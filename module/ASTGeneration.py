@@ -65,8 +65,6 @@ class ASTGeneration(FluVisitor):
         number_of_months = int(ctx.NUMBER().getText())
         if beforeAfter == "before":
             now = now - relativedelta(months=number_of_months)
-        elif beforeAfter == "after":
-            now = now + relativedelta(months=number_of_months)
         elif beforeAfter == "later":
             now = now + relativedelta(months=number_of_months)
         return now
@@ -115,7 +113,7 @@ class ASTGeneration(FluVisitor):
         now = datetime.today()
         if beforeAfter == "before":
             now = now - timedelta(int(ctx.NUMBER().getText()))
-        elif beforeAfter == "after":
+        elif beforeAfter == "later":
             now = now + timedelta(int(ctx.NUMBER().getText()))
         return now
 

@@ -130,5 +130,5 @@ class Database:
 
 
 db = Database()
-for collection_name in db.db.list_collection_names():
-    db.db[collection_name].delete_many({})
+# for collection_name in db.db.list_collection_names():
+#     db.db[collection_name].delete_many({})

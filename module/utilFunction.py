@@ -202,28 +202,37 @@ class utilFunction:
         }
 
     def getPeriodRangeByTime(self, date: datetime):
+        now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
-            sort=[("start_at", DESCENDING)]
+                sort=[("start_at", DESCENDING)]
         )
         if not latest_report or "end_at" not in latest_report:
             return None
 
-        end_at = latest_report["end_at"]
-        if isinstance(end_at, str):
-            end_at = datetime.strptime(end_at, "%Y-%m-%d")
-        elif isinstance(end_at, dict) and "$date" in end_at:
-            end_at = datetime.fromisoformat(end_at["$date"])
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
 
-        delta = relativedelta(date, end_at)
-        total_months = delta.years * 12 + delta.months
-        predicted_start = end_at + relativedelta(months=+total_months)
-        predicted_end = predicted_start + timedelta(days=self.cache.get('period_length') - 1)
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+
+            # Keep adding cycle_length days until we pass the given date
+        predicted_start = start_at
+        while predicted_start <= date:
+            predicted_start += timedelta(days=cycle_length)
+
+        predicted_end = predicted_start + timedelta(days=period_length - 1)
 
         return {
-            "start_at": predicted_start.strftime("%d/%m/%Y"),
-            "end_at": predicted_end.strftime("%d/%m/%Y"),
-            "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
+                "start_at": predicted_start.strftime("%d/%m/%Y"),
+                "end_at": predicted_end.strftime("%d/%m/%Y"),
+                "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
+            
         }
+
+
     
     def getOvulationRangeByTime(self,date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
@@ -283,76 +292,3 @@ class utilFunction:
 
 
 
-
-
-#         user_reports = self.databaseCon.db["user_reports"]
-#         last_three_reports = list(
-#             user_reports.find().sort("start_at", DESCENDING).limit(3)
-#         )
-#         last_three_reports.sort(key=lambda x: x['start_at'])
-#         durations = []
-#         for report in last_three_reports:
-#             start = report['start_at']
-#             end = report['end_at']
-#             if isinstance(start, str):
-#                 start = datetime.fromisoformat(start)
-#             if isinstance(end, str):
-#                 end = datetime.fromisoformat(end)
-#             diff_days = (end.date() - start.date()).days
-#             durations.append(diff_days)
-
-#         mean_duration = sum(durations) / len(durations) if durations else 0
-        
-
-#         # Calculate differences between start_at of different reports
-#         start_diffs = []
-#         for i in range(1, len(last_three_reports)):
-#             prev_start = last_three_reports[i - 1]['start_at']
-#             curr_start = last_three_reports[i]['start_at']
-#             if isinstance(prev_start, str):
-#                 prev_start = datetime.fromisoformat(prev_start)
-#             if isinstance(curr_start, str):
-#                 curr_start = datetime.fromisoformat(curr_start)
-#             diff_days = (curr_start.date() - prev_start.date()).days
-#             start_diffs.append(diff_days)
-
-#         mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
-#     def getOvulationWithMonth(self, time):
-#         user_reports = self.databaseCon.db["user_reports"]
-#         last_three_reports = list(
-#             user_reports.find().sort("start_at", DESCENDING).limit(3)
-#         )
-#         last_three_reports.sort(key=lambda x: x['start_at'])
-#         durations = []
-#         for report in last_three_reports:
-#             start = report['start_at']
-#             end = report['end_at']
-#             if isinstance(start, str):
-#                 start = datetime.fromisoformat(start)
-#             if isinstance(end, str):
-#                 end = datetime.fromisoformat(end)
-#             diff_days = (end.date() - start.date()).days
-#             durations.append(diff_days)
-
-#         mean_duration = sum(durations) / len(durations) if durations else 0
-
-#         # Calculate differences between start_at of different reports
-#         start_diffs = []
-#         for i in range(1, len(last_three_reports)):
-#             prev_start = last_three_reports[i - 1]['start_at']
-#             curr_start = last_three_reports[i]['start_at']
-#             if isinstance(prev_start, str):
-#                 prev_start = datetime.fromisoformat(prev_start)
-#             if isinstance(curr_start, str):
-#                 curr_start = datetime.fromisoformat(curr_start)
-#             diff_days = (curr_start.date() - prev_start.date()).days
-#             start_diffs.append(diff_days)
-
-#         mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
-
-#         print("Mean report duration:", mean_duration)
-#         print("Mean start_at difference between reports:", mean_start_diff)
-#     def getCycleStatusOnDate(self, date):
-#         # lay thong tin cycle bang ngay (co trong ovulation, period non fertile hay z ko nha), ngay da co the input vao mongo
-#         return "lam dum tui nha phuc"
-# =======
