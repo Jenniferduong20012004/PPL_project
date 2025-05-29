@@ -2,7 +2,9 @@ grammar Flu;
 
 program: sentence;
 
-sentence: require | ask;
+sentence: require | ask | checkStats;
+
+checkStats: CHECK CYCLE STATS;
 
 require: verb (phrase)? (ON|IN)? (date)?;
 
@@ -64,6 +66,9 @@ CYCLE: 'cycle';
 START: 'start'| 'Start';
 END: 'End'| 'end';
 SHOW: 'show'| 'Show';
+
+CHECK:'check'| 'Check';
+STATS: 'statistic';
 
 ON: 'on';
 IN: 'in';

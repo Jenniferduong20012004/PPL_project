@@ -292,7 +292,7 @@ class LunaApp:
 
         self.mood_button = ctk.CTkButton(
             left_buttons,
-            text="Mood",
+            text="Check regular",
             height=35,
             width=90,
             command=lambda: self.quick_log("mood"),
@@ -439,7 +439,7 @@ class LunaApp:
     def quick_log(self, log_type):
         if log_type == "mood":
             self.message_entry.delete(0, "end")
-            self.message_entry.insert(0, "How should I track my mood today?")
+            self.message_entry.insert(0, "Check cycle statistic")
         elif log_type == "symptoms":
             self.message_entry.delete(0, "end")
             self.message_entry.insert(0, "I want to log my symptoms")
@@ -529,6 +529,8 @@ class LunaApp:
                         response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. You are also expected to experiece the second period from {bot_response['result']['second_start_at']} to {bot_response['result']['second_end_at']}. {bot_response['result']['reminder']}"
             elif bot_response.get("type") == "CycleStatusOp":
                 response_text = f"Cycle status on {bot_response['time'].strftime('%d/%m/%Y')}: {bot_response['result']}"
+            elif bot_response.get("type") == "CheckOp":
+                response_text = f"Average cycle length is {bot_response['result']["cycle_length"]} and average period length is {bot_response['result']["period_length"]}. {bot_response['result']['reminder']}"
         else:
             response_text = str(bot_response)
 

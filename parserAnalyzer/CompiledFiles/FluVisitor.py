@@ -1,4 +1,4 @@
-# Generated from F:\\PPL\\PPL_Project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
+# Generated from F:\\PPL\\PPL_project\\parserAnalyzer\\Flu.g4 by ANTLR 4.9.2
 from antlr4 import *
 if __name__ is not None and "." in __name__:
     from .FluParser import FluParser
@@ -16,6 +16,11 @@ class FluVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by FluParser#sentence.
     def visitSentence(self, ctx:FluParser.SentenceContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by FluParser#checkStats.
+    def visitCheckStats(self, ctx:FluParser.CheckStatsContext):
         return self.visitChildren(ctx)
 
 

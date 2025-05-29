@@ -4,7 +4,17 @@ from typing import List, Tuple
 from datetime import datetime
 from module.utilFunction import utilFunction
 
-
+class CheckOp:
+    def __init__(self):
+        self.utilFunction = utilFunction()
+        self.result = None
+    def action(self):
+        self.result = self.utilFunction.checkStatistic()
+    def to_dict(self):
+        return {
+            "type": "CheckOp",
+            "result": self.result,
+        }
 class CycleStatusOp:
     def __init__(self, time):
         self.time = time

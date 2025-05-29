@@ -17,6 +17,35 @@ class utilFunction:
         self.fertile_start_offset = 10
         self.fertile_end_offset = 16
         self.ovulation_offset = 14
+    def checkStatistic(self):
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+        cycleNormal = True
+        periodNormal = True
+        if (cycle_length <21 or cycle_length > 35):
+            cycleNormal = False
+        if (period_length < 2 or period_length > 7):
+            periodNormal = False
+        reminder = None
+        if (cycleNormal and periodNormal):
+            reminder = "Both of your statistic falls well within the normal range. A normal menstrual cycle typically ranges from 21 to 35 days, measured from the first day of one period to the first day of the next. Within this cycle, the period — or the days of menstrual bleeding — usually lasts between 2 to 7 days. Both the cycle length and the period duration can vary from person to person, and even from month to month, but as long as they fall within these ranges, they are generally considered normal. Most people experience a cycle of around 28 days and a period lasting 3 to 5 days, though slight variations are completely healthy."
+        elif (cycleNormal and not periodNormal):
+            if (periodNormal > 7):
+                reminder = "Your cycle is in normal range; however, your period range is longer than the typical range. Bleeding for more than 7 days is called menorrhagia and may need medical evaluation. Causes could include hormonal imbalances, uterine fibroids, polyps, or other conditions. If your period consistently lasts 10 days or is accompanied by heavy bleeding, clots, or fatigue, it's a good idea to talk to a healthcare provider to rule out any underlying issues."
+            else:
+                reminder = "Your cycle is in normal range; however, your period range is shorter than the typical range.Occasional short periods can be normal — especially due to:Stress, diet changes, or hormonal fluctuations, Perimenopause or puberty, Birth control use (e.g., pills, IUDs).If it happens consistently or is unusually light, it may indicate: Hormonal imbalance, Pregnancy-related spotting, Thyroid issues or other health concerns. Our recommendation: If this is a one-time occurrence, it may not be a concern. If it's recurrent or unusual for you, consider discussing it with a healthcare provider to rule out underlying issues."
+        elif (not cycleNormal and periodNormal):
+            if (cycleNormal <21):
+                reminder = "While your period is normal but yuour menstrual cycle length is less than 20 days, it is shorter than the normal range and may indicate a condition called frequent menstruation or polymenorrhea. A cycle shorter than 21 days means you’re bleeding more often than usual. Common causes of short cycles include:Hormonal imbalances, Perimenopause, Thyroid disorders, Stress, intense exercise, or low body weight, Certain medications or health conditions. Our recommendation: if this happens occasionally, it might not be a concern. If your cycles are consistently less than 21 days, it’s important to see a healthcare provider. They may do hormone testing or imaging to understand the cause."
+            else:
+                reminder = "While your period is normal but your menstrual cycle length is longer than 35 days, it is longer than the normal range. This condition is known as oligomenorrhea — infrequent periods. Common causes include: Polycystic Ovary Syndrome (PCOS), Hormonal imbalance (especially low estrogen or high androgens), Thyroid dysfunction, Stress, weight changes, or overexercise, Perimenopause (in older reproductive-age individuals). Our recommendation: if it happens occasionally, it may be due to stress or lifestyle. If it happens regularly, or if your periods are unpredictable, consult a healthcare provider for evaluation."
+        else:
+            reminder = "Both of your statistic not falls within the normal range. A normal menstrual cycle typically ranges from 21 to 35 days, measured from the first day of one period to the first day of the next. Within this cycle, the period — or the days of menstrual bleeding — usually lasts between 2 to 7 days. Both the cycle length and the period duration can vary from person to person, and even from month to month, but as long as they fall within these ranges, they are generally considered normal. Most people experience a cycle of around 28 days and a period lasting 3 to 5 days, though slight variations are completely healthy. Our recommendation: If it happens regularly, or if your periods are unpredictable, consult a healthcare provider for evaluation."
+        return {
+            "cycle_length": cycle_length,
+            "period_length": period_length,
+            "reminder": reminder
+        }
     def initPeriodForMonth(self):
         latest_report = self.databaseCon.db["user_reports"].find_one(
             sort=[("start_at", DESCENDING)]
