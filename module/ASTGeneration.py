@@ -14,12 +14,17 @@ from dateutil.relativedelta import relativedelta
 class ASTGeneration(FluVisitor):
     def visitProgram(self, ctx: FluParser.ProgramContext):
         return ctx.sentence().accept(self)
-
     def visitSentence(self, ctx: FluParser.SentenceContext):
         if ctx.ask():
             return ctx.ask().accept(self)
         elif ctx.require():
             return ctx.require().accept(self)
+        elif ctx.checkStats():
+            return ctx.checkStats().accept(self)
+    def visitCheckStats(self, ctx: FluParser.CheckStatsContext):
+        check = CheckOp ()
+        check.action()
+        return check.to_dict()
 
     def visitAsk(self, ctx: FluParser.AskContext):
         if ctx.cycleStatus():
