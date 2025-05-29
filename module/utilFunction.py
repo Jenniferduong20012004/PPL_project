@@ -22,6 +22,11 @@ class utilFunction:
             sort=[("start_at", DESCENDING)]
         )
         if not latest_report or "start_at" not in latest_report:
+            self.cache['period_length'] = 5
+            self.cache['cycle_length'] = 29
+            self.cache['ovulation_offset'] = 14
+            self.cache['fertile_start_offset'] = 10
+            self.cache['fertile_end_offset']= 16
             return "Quick reminder: You have not entered any period day into the system. Please add for calculation!"
         user_reports = self.databaseCon.db["user_reports"]
         last_three_reports = list(

@@ -51,10 +51,11 @@ class ASTGeneration(FluVisitor):
     def visitMonthWord(self, ctx: FluParser.MonthWordContext):
         month = ctx.WHEN().getText().lower
         now = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        if month == "before":
+        if month == "previous":
             now = now - relativedelta(months=1)
-        elif month == "after":
+        elif month == "next":
             now = now + relativedelta(months=1)
+        print (now)
         return now
 
     def visitMonthCompare(self, ctx: FluParser.MonthCompareContext):
@@ -113,9 +114,9 @@ class ASTGeneration(FluVisitor):
         beforeAfter = ctx.BeforeAfter().getText().lower()
         now = datetime.today()
         if beforeAfter == "before":
-            now = now - timedelta(int(ctx.NUMBER()))
+            now = now - timedelta(int(ctx.NUMBER().getText()))
         elif beforeAfter == "after":
-            now = now + timedelta(int(ctx.NUMBER()))
+            now = now + timedelta(int(ctx.NUMBER().getText()))
         return now
 
     def visitDateInWord(self, ctx: FluParser.DateInWordContext):
@@ -123,6 +124,6 @@ class ASTGeneration(FluVisitor):
         now = datetime.today()
         if time == "yesterday":
             now = now - timedelta(1)
-        elif time == "today":
+        elif time == "tomorrow":
             now = now + timedelta(1)
-        return now
+        return now 
