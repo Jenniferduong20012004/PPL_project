@@ -4,17 +4,103 @@ from datetime import datetime, timedelta
 from module.UserReport import UserReport
 from pymongo import DESCENDING
 from dateutil.relativedelta import relativedelta
+import diskcache as dc
+
 
 
 class utilFunction:
     def __init__(self):
         self.databaseCon = Database()
+        self.cache = dc.Cache('./mycache')
         self.cycle_length = 29
         self.period_length = 5
         self.fertile_start_offset = 10
         self.fertile_end_offset = 16
         self.ovulation_offset = 14
+    def initPeriodForMonth(self):
+        latest_report = self.databaseCon.db["user_reports"].find_one(
+            sort=[("start_at", DESCENDING)]
+        )
+        if not latest_report or "start_at" not in latest_report:
+            return "Quick reminder: You have not entered any period day into the system. Please add for calculation!"
+        user_reports = self.databaseCon.db["user_reports"]
+        last_three_reports = list(
+            user_reports.find().sort("start_at", DESCENDING).limit(3)
+        )
+        last_three_reports.sort(key=lambda x: x['start_at'])
+        durations = []
+        for report in last_three_reports:
+            start = report['start_at']
+            end = report['end_at']
+            if isinstance(start, str):
+                start = datetime.fromisoformat(start)
+            if isinstance(end, str):
+                end = datetime.fromisoformat(end)
+            diff_days = (end.date() - start.date()).days
+            durations.append(diff_days)
 
+        mean_duration = sum(durations) / len(durations) if durations else 5
+        self.cache['period_length'] = mean_duration  # Store
+        # print(cache['key'])     
+        start_diffs = []
+        for i in range(1, len(last_three_reports)):
+            prev_start = last_three_reports[i - 1]['start_at']
+            curr_start = last_three_reports[i]['start_at']
+            if isinstance(prev_start, str):
+                prev_start = datetime.fromisoformat(prev_start)
+            if isinstance(curr_start, str):
+                curr_start = datetime.fromisoformat(curr_start)
+            diff_days = (curr_start.date() - prev_start.date()).days
+            start_diffs.append(diff_days)
+
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 29
+        self.cache['cycle_length'] = mean_start_diff  # Store
+        # Ovulation usually happens 14 days before the next period
+        ovulation_offset = mean_start_diff - 14   # days after period starts
+
+        # Fertile window is 5-6 days ending on ovulation day
+        fertile_start_offset = ovulation_offset - 5  # 5 days before ovulation
+        fertile_end_offset = ovulation_offset        # ends at ovulation day
+
+        self.cache['ovulation_offset'] = ovulation_offset 
+        self.cache['fertile_start_offset'] = fertile_start_offset
+        self.cache['fertile_end_offset']= fertile_end_offset
+
+    def getOvulationWithMonth(self, time):
+        user_reports = self.databaseCon.db["user_reports"]
+        last_three_reports = list(
+            user_reports.find().sort("start_at", DESCENDING).limit(3)
+        )
+        last_three_reports.sort(key=lambda x: x['start_at'])
+        durations = []
+        for report in last_three_reports:
+            start = report['start_at']
+            end = report['end_at']
+            if isinstance(start, str):
+                start = datetime.fromisoformat(start)
+            if isinstance(end, str):
+                end = datetime.fromisoformat(end)
+            diff_days = (end.date() - start.date()).days
+            durations.append(diff_days)
+
+        mean_duration = sum(durations) / len(durations) if durations else 0
+
+        # Calculate differences between start_at of different reports
+        start_diffs = []
+        for i in range(1, len(last_three_reports)):
+            prev_start = last_three_reports[i - 1]['start_at']
+            curr_start = last_three_reports[i]['start_at']
+            if isinstance(prev_start, str):
+                prev_start = datetime.fromisoformat(prev_start)
+            if isinstance(curr_start, str):
+                curr_start = datetime.fromisoformat(curr_start)
+            diff_days = (curr_start.date() - prev_start.date()).days
+            start_diffs.append(diff_days)
+
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 0
+        # cache['key'] = 'value'  # Store
+        # print(cache['key'])     # Retrieve
+        
     def getCycleStatusOnDate(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
             sort=[("start_at", DESCENDING)]
@@ -29,18 +115,18 @@ class utilFunction:
             start_at = datetime.fromisoformat(start_at["$date"])
 
         current_cycle_start = start_at
-        while current_cycle_start + timedelta(days=self.cycle_length) < date:
-            current_cycle_start += timedelta(days=self.cycle_length)
+        while current_cycle_start + timedelta(days=self.cache.get('cycle_length')) < date:
+            current_cycle_start += timedelta(days=self.cache.get('cycle_length'))
 
         period_range = (
             current_cycle_start,
-            current_cycle_start + timedelta(days=self.period_length - 1),
+            current_cycle_start + timedelta(days=self.cache.get('period_length') - 1),
         )
         fertile_range = (
-            current_cycle_start + timedelta(days=self.fertile_start_offset),
-            current_cycle_start + timedelta(days=self.fertile_end_offset),
+            current_cycle_start + timedelta(days=self.cache.get('fertile_start_offset')),
+            current_cycle_start + timedelta(days=self.cache.get('fertile_end_offset')),
         )
-        ovulation_date = current_cycle_start + timedelta(days=self.ovulation_offset)
+        ovulation_date = current_cycle_start + timedelta(days=self.cache.get('ovulation_offset'))
 
         if period_range[0] <= date <= period_range[1]:
             return "period"
@@ -62,7 +148,7 @@ class utilFunction:
 
     def requireStart(self, date):
         user_report = UserReport(
-            start_at=date, end_at=date + timedelta(days=self.period_length)
+            start_at=date, end_at=date + timedelta(days=self.cache.get('period_length'))
         )
         user_report.save_to_db()
         return user_report
@@ -98,7 +184,7 @@ class utilFunction:
         ovulation_day = (
             end_at
             + relativedelta(months=+total_months)
-            + timedelta(days=self.ovulation_offset)
+            + timedelta(days=self.cache.get('ovulation_offset'))
         )
 
         non_fertile_start = ovulation_day - timedelta(days=5)
@@ -126,7 +212,7 @@ class utilFunction:
         delta = relativedelta(date, end_at)
         total_months = delta.years * 12 + delta.months
         predicted_start = end_at + relativedelta(months=+total_months)
-        predicted_end = predicted_start + timedelta(days=self.period_length - 1)
+        predicted_end = predicted_start + timedelta(days=self.cache.get('period_length') - 1)
 
         return {
             "start_at": predicted_start.strftime("%d/%m/%Y"),
@@ -152,7 +238,7 @@ class utilFunction:
         ovulation_day = (
             end_at
             + relativedelta(months=+total_months)
-            + timedelta(days=self.ovulation_offset)
+            + timedelta(days=self.cache.get('ovulation_offset'))
         )
 
 
@@ -178,7 +264,7 @@ class utilFunction:
         ovulation_day = (
             end_at
             + relativedelta(months=+total_months)
-            + timedelta(days=self.ovulation_offset)
+            + timedelta(days=self.cache.get('ovulation_offset'))
         )
 
         fertile_start = ovulation_day - timedelta(days=5)
