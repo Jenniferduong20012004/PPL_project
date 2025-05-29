@@ -107,6 +107,7 @@ class utilFunction:
         return {
             "start_at": non_fertile_start.strftime("%d/%m/%Y"),
             "end_at": non_fertile_end.strftime("%d/%m/%Y"),
+            "reminder": "During non-fertile days—the times outside your fertile window and menstruation—your chance of pregnancy is lower but not zero, especially if your cycle is irregular. It’s still important to maintain regular contraception if you want to avoid pregnancy. Use this time to focus on overall health: stay active, eat well, and manage stress. Keep tracking your cycle to better understand your body and prepare for upcoming fertile or period days.",
         }
 
     def getPeriodRangeByTime(self, date: datetime):
@@ -157,6 +158,7 @@ class utilFunction:
 
         return {
             "ovulation_day": ovulation_day.strftime("%d/%m/%Y"),
+            "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
         }
     def getFertileRangeByTime (self, date):
         latest_report = self.databaseCon.db["user_reports"].find_one(

@@ -46,7 +46,7 @@ class ASTGeneration(FluVisitor):
         if ctx.monthCompare():
             return ctx.monthCompare().accept(self)
         elif ctx.monthWord():
-            return ctx.monthCompare().accept(self)
+            return ctx.monthWord().accept(self)
 
     def visitMonthWord(self, ctx: FluParser.MonthWordContext):
         month = ctx.WHEN().getText().lower
