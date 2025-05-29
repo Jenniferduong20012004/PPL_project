@@ -9,6 +9,7 @@ import diskcache as dc
 
 
 class utilFunction:
+    
     def __init__(self):
         self.databaseCon = Database()
         self.cache = dc.Cache('./mycache')
@@ -17,6 +18,41 @@ class utilFunction:
         self.fertile_start_offset = 10
         self.fertile_end_offset = 16
         self.ovulation_offset = 14
+    def getSymp (self, listOfSymp):
+        now = datetime.now()
+        latest_report = self.databaseCon.db["user_reports"].find_one(
+            sort=[("start_at", DESCENDING)]
+        )
+
+        if not latest_report or "end_at" not in latest_report:
+            return None
+
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
+
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+
+        # Calculate how many full cycles have passed since start_at
+        days_passed = (now - start_at).days
+        cycles_passed = days_passed // cycle_length + 1  # Next predicted cycle
+
+        predicted_start = start_at + timedelta(days=cycles_passed * cycle_length)
+        predicted_end = predicted_start + timedelta(days=period_length)
+        result = ", ".join(listOfSymp)
+        # Check if now is within the predicted period
+        if predicted_start <= now <= predicted_end:
+            return {
+                "reminder":f"You are currently in your period. {result} are common period symptoms, usually linked to PMS or primary dysmenorrhea. They’re caused by hormonal shifts, uterine contractions, and prostaglandins. If symptoms are severe, disrupt daily life, don’t improve with medication, or suddenly worsen, it may signal a condition like endometriosis or fibroids—see a doctor."
+            }
+        else:
+            return {
+                "reminder": f"You are currently not in your period. If you're experiencing {result} now, it could be due to other causes such as ovulation, stress, digestive issues, or underlying conditions like IBS, hormonal imbalance, or infections. If these symptoms are frequent, severe, or unusual for you, it's best to consult a healthcare provider for proper evaluation."
+            }
+
     def checkStatistic(self):
         cycle_length = self.cache.get("cycle_length")
         period_length = self.cache.get("period_length")

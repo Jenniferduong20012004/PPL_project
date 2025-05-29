@@ -4,7 +4,13 @@ program: sentence;
 
 sentence: require | ask | checkStats | symptom;
 
-symptom: fee
+symptom: dateInWord I FEEL symp;
+
+symp : (SYMP COMMA symp) | SYMP ;
+
+SYMP:'cramps'| 'bloating'| 'stomachache'| 'fatigue'|'headache'|'nausea'|'diarrhea';
+
+COMMA : ',';
 
 checkStats: CHECK CYCLE STATS;
 
@@ -76,6 +82,8 @@ ON: 'on';
 IN: 'in';
 
 WHEN: 'this'|'previous'|'next';
+I :'i';
+FEEL : 'feel';
 
 WORD: [a-z]+;
 

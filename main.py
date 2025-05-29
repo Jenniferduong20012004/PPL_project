@@ -442,7 +442,7 @@ class LunaApp:
             self.message_entry.insert(0, "Check cycle statistic")
         elif log_type == "symptoms":
             self.message_entry.delete(0, "end")
-            self.message_entry.insert(0, "I want to log my symptoms")
+            self.message_entry.insert(0, "today i feel headache, nausea")
         self.message_entry.focus()
 
     def clear_chat(self):
@@ -531,6 +531,8 @@ class LunaApp:
                 response_text = f"Cycle status on {bot_response['time'].strftime('%d/%m/%Y')}: {bot_response['result']}"
             elif bot_response.get("type") == "CheckOp":
                 response_text = f"Average cycle length is {bot_response['result']["cycle_length"]} and average period length is {bot_response['result']["period_length"]}. {bot_response['result']['reminder']}"
+            elif bot_response.get("type") == "SympOp":
+                response_text = f"{bot_response['result']["reminder"]}"
         else:
             response_text = str(bot_response)
 

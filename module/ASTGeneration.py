@@ -21,6 +21,27 @@ class ASTGeneration(FluVisitor):
             return ctx.require().accept(self)
         elif ctx.checkStats():
             return ctx.checkStats().accept(self)
+        elif ctx.symptom().accept (self):
+            return ctx.symptom().accept(self)
+    def visitSymptom(self, ctx: FluParser.SymptomContext):
+        if ctx.symp():
+            listSymp = ctx.symp().accept(self)
+            symp = SympOp(listSymp)
+            symp.action()
+            return symp.to_dict()
+    def visitSymp(self, ctx: FluParser.SympContext):
+        symptoms = []
+        listOfSymp = None
+        if ctx.SYMP():
+            symptoms.append(ctx.SYMP().getText())
+        if ctx.symp():
+            listOfSymp = ctx.symp().accept(self)
+        if (listOfSymp is not None):
+            return symptoms + listOfSymp
+        return symptoms
+        
+
+        
     def visitCheckStats(self, ctx: FluParser.CheckStatsContext):
         check = CheckOp ()
         check.action()
