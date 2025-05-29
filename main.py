@@ -506,11 +506,11 @@ class LunaApp:
                 response_text = bot_response["result"]
                 phrase = bot_response["phrase"]
                 if phrase == "ovulation":
-                    response_text = f"Ovulation date: {bot_response['result']['ovulation_day']}"
+                    response_text = f"Ovulation date: {bot_response['result']['ovulation_day']}. {bot_response['result']['reminder']}"
                 elif phrase == "fertile":
                     response_text = f"Fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
                 elif phrase == "non-fertile":
-                    response_text = f"Non-fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}"
+                    response_text = f"Non-fertile range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
                 elif phrase == "period":
                     response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
             elif bot_response.get("type") == "CycleStatusOp":
