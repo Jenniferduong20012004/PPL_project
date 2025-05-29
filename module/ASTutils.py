@@ -4,53 +4,78 @@ from typing import List, Tuple
 from datetime import datetime
 from module.utilFunction import utilFunction
 
+
 class CycleStatusOp:
     def __init__(self, time):
         self.time = time
         self.utilFunction = utilFunction()
+        self.result = None
+
+    def to_dict(self):
+        return {
+            "type": "CycleStatusOp",
+            "time": self.time,
+            "result": self.result,
+        }
+
     def action(self):
-        return str (self.utilFunction.getCycleStatusOnDate(self.time))
+        self.result = self.utilFunction.getCycleStatusOnDate(self.time)
 
 
 class SpecificPhraseOp:
     def __init__(self, phrase, time):
         self.phrase = phrase
         self.time = time
-    def action (self):
-        if (self.phrase == 'ovulation'):
-            return "phuc oi lam cho toi nay la lay phrase ovulation o thang do (time)"
-        elif (self.phrase == 'fertile'):
-            return "phuc oi lam cho toi nay la lay phrase fertile o thang do (time)"
-        elif (self.phrase == 'non-fertile'):
-            return "phuc oi lam cho toi nay la lay phrase non-fertile o thang do (time)"
-        elif (self.phrase == 'period'):
-            return "phuc oi lam cho toi nay la lay phrase period o thang do (time)"
+        self.utilFunction = utilFunction()
+        self.result = None
+
+    def action(self):
+        if self.phrase == "ovulation":
+            self.result = self.utilFunction.getOvulationRangeByTime(self.time)
+        elif self.phrase == "fertile":
+            self.result = self.utilFunction.getFertileRangeByTime(self.time)
+        elif self.phrase == "non-fertile":
+            self.result = self.utilFunction.getNonFertileRangeByTime(self.time)
+        elif self.phrase == "period":
+            self.result = self.utilFunction.getPeriodRangeByTime(self.time)
+
+    def to_dict(self):
+        return {
+            "type": "SpecificPhraseOp",
+            "phrase": self.phrase,
+            "time": self.time,
+            "result": self.result,
+        }
+
 
 class RequireOp:
     def __init__(self, verb, time):
         self.verb = verb
         self.time = time
         self.utilFunction = utilFunction()
-    def action (self):
-        if (self.verb == 'show'):
-            return str(self.utilFunction.getPeriodCycle())
-        elif (self.verb == 'start'):
-            if (self.time == None):
-                return "Please input date"
+        self.result = None
+
+    def action(self):
+        if self.verb == "show":
+            self.result = self.utilFunction.getPeriodCycle()
+        elif self.verb == "start":
+            if self.time is None:
+                self.result = "Please input date"
             else:
-                return str(self.utilFunction.requireStart(self.time))
-        elif (self.verb == 'end'):
-            if (self.time == None):
-                return "Please input date"
+                self.result = self.utilFunction.requireStart(self.time)
+        elif self.verb == "end":
+            if self.time is None:
+                self.result = "Please input date"
             else:
-                return str (self.utilFunction.requireEnd(self.time))
+                self.result = self.utilFunction.requireEnd(self.time)
 
     def to_dict(self):
         return {
             "type": "RequireOp",
             "verb": self.verb,
             "time": self.time,
+            "result": self.result,
         }
 
     def __repr__(self):
-        return str(self.to_dict())
+        return self.to_dict()

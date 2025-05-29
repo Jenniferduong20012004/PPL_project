@@ -27,52 +27,24 @@ class Response:
         self.astGeneration = ASTGeneration()
         self.err = CustomErrorListener()
         self.utilFunction = utilFunction()
-        self.responses = {
-            "hi": ["Hello! 💖", "Hey there! 🌸", "Hi! How can I help you today? 🤗"],
-            "hello": ["Hi! 😄", "Hello! What's up? 🌟", "Hey, good to see you! 💕"],
-            "how are you": [
-                "I'm doing great, thanks! How are you feeling? 💖",
-                "I'm here and ready to help! 🌸",
-                "Awesome! How's your health today? 🤗",
-            ],
-            "bye": [
-                "Goodbye! Take care! 👋💕",
-                "See you later! Stay healthy! 😊🌸",
-                "Bye! Remember to track your cycle! 💖",
-            ],
-            "what is your name": [
-                "I'm Luna, your period tracking assistant! 🌸💖",
-                "Call me Luna! I'm here to help with your health! 💕",
-                "I'm Luna, nice to meet you! 🤗🌸",
-            ],
-            "default": [
-                "Tell me more about how you're feeling! 🤔💖",
-                "I'm here to help with your period tracking! 🌸",
-                "What would you like to know about your health? 💕",
-            ],
-        }
+        # fallback response: random responses for fallback when parsing fails
+        self.fallback_responses = [
+            "Tell me more about how you're feeling! 🤔💖",
+            "I'm here to help with your period tracking! 🌸",
+            "What would you like to know about your health? 💕",
+            "I can help you track your cycle, symptoms, and health! 💗",
+            "Feel free to ask me about your menstrual cycle! 🌙",
+            "How can I assist you with your health tracking today? 🤗",
+            "I'm Luna, your period tracking companion! What's on your mind? 💖",
+        ]
 
-    # check for simple keyword matching first
-    def get_simple_response(self, user_message):
-        user_message = user_message.lower().strip()
-
-        for key in self.responses:
-            if key in user_message:
-                return random.choice(self.responses[key])
-
-        return None
-
-    # if input user is incorrect, return a random default response
-    def get_default_response(self):
-        return random.choice(self.responses["default"])
+    def get_fallback_response(self):
+        return random.choice(self.fallback_responses)
 
     def checkError(self, user_str):
-        # try simple response matching
-        simple_response = self.get_simple_response(user_str)
-        if simple_response:
-            return simple_response
-
-        # if no simple match, try with ANTLR parsing for correct format
+        self.err.has_error = False
+        
+        # process input through ANTLR parser
         input_stream = InputStream(user_str)
         lexer = FluLexer(input_stream)
         stream = CommonTokenStream(lexer)
@@ -82,9 +54,9 @@ class Response:
         tree = parser.program()
 
         if self.err.has_error:
-            self.err.has_error = False
-            return self.get_default_response()
+            # if parsing failed, return random fallback response
+            return self.get_fallback_response()
         else:
+            # if parsing succeeded, generate AST and execute operations
             result = tree.accept(self.astGeneration)
-            print(result)
             return result
