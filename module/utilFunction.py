@@ -130,6 +130,7 @@ class utilFunction:
         return {
             "start_at": predicted_start.strftime("%d/%m/%Y"),
             "end_at": predicted_end.strftime("%d/%m/%Y"),
+            "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
         }
     
     def getOvulationRangeByTime(self,date):
@@ -184,6 +185,7 @@ class utilFunction:
         return {
             "start_at": fertile_start.strftime("%d/%m/%Y"),
             "end_at": fertile_end.strftime("%d/%m/%Y"),
+            "reminder": "During fertile days, typically around ovulation, a woman is most likely to conceive. If trying to get pregnant, this is the best time for unprotected sex, supported by a healthy lifestyle and tracking signs like cervical mucus or ovulation kits. If avoiding pregnancy, it's crucial to use protection, as this window is the riskiest for unplanned conception. Understanding your cycle and being mindful of your goals helps you make informed reproductive choices.",
         }
 
 
