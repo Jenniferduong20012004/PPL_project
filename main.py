@@ -10,6 +10,7 @@ ctk.set_appearance_mode("white")
 class LunaApp:
     def __init__(self, root):
         self.getResponse = getResponseForUser()
+        self.iniSentence=  self.getResponse.checkPeriodThisMonth()
 
         self.root = root
         self.root.title("🌸 Luna - Period Tracking Assistant")
@@ -192,6 +193,13 @@ class LunaApp:
             "Welcome to your personal period tracking assistant! I'm here to help you monitor your cycle, track symptoms, and answer health questions. How are you feeling today? 💖",
             is_user=False,
         )
+        if (self.iniSentence is not None):
+            self.add_message(
+                "Luna",
+                self.iniSentence,
+                is_user=False,
+            )
+        
 
     def create_chat_header(self):
         self.chat_header_frame = ctk.CTkFrame(
