@@ -195,11 +195,25 @@ class utilFunction:
         )
         if not latest_report:
             return None
+        
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.fromisoformat(start_at)
+
+        # check end < start
+        if date < start_at:
+            return {
+                "type": "RequireOp",
+                "verb": "end",
+                "time": date,
+                "result": "End date cannot be earlier than start date"
+            }
+
         self.databaseCon.db["user_reports"].update_one(
             {"_id": latest_report["_id"]}, {"$set": {"end_at": date}}
         )
         return UserReport(
-            _id=latest_report["_id"], start_at=latest_report["start_at"], end_at=date
+            _id=latest_report["_id"], start_at=start_at, end_at=date
         )
 
     def getNonFertileRangeByTime(self, date: datetime):

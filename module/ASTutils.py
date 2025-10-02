@@ -81,12 +81,12 @@ class RequireOp:
             self.result = self.utilFunction.getPeriodCycle()
         elif self.verb == "start":
             if self.time is None:
-                self.result = "Please input date"
+                self.result = "Please input valid prompt for start date"
             else:
                 self.result = self.utilFunction.requireStart(self.time)
         elif self.verb == "end":
             if self.time is None:
-                self.result = "Please input date"
+                self.result = "Please input valid prompt for end date"
             else:
                 self.result = self.utilFunction.requireEnd(self.time)
 

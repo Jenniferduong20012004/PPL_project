@@ -478,26 +478,65 @@ class LunaApp:
 
         if isinstance(bot_response, dict):
             response_text = bot_response.get("result", "No result available")
+
             if bot_response.get("type") == "RequireOp":
-                if bot_response["result"] is None:
-                    response_text = "Please input date"
-                elif bot_response["verb"] == "start":
-                    start_date = bot_response["result"].start_at
-                    if start_date:
-                        response_text = (
-                            f"Cycle started on {start_date.strftime('%d/%m/%Y')}"
-                        )
-                    else:
-                        response_text = "Cycle start date not available."
-                elif bot_response["verb"] == "end":
-                    end_date = bot_response["result"].end_at
-                    if end_date:
-                        response_text = (
-                            f"Cycle ended on {end_date.strftime('%d/%m/%Y')}"
-                        )
-                    else:
-                        response_text = "Cycle end date not available."
-                elif bot_response["verb"] == "show":
+                verb = bot_response["verb"]
+                res = bot_response["result"]
+
+                if verb == "start":
+                    if isinstance(res, str):
+                        response_text = res
+                    elif isinstance(res, dict):
+                        start_date = res.get("start_at")
+                        if start_date:
+                            response_text = (
+                                f"Cycle started on {start_date.strftime('%d/%m/%Y')}"
+                                if hasattr(start_date, "strftime")
+                                else f"Cycle started on {start_date}"
+                            )
+                        else:
+                            response_text = "Cycle start date not available."
+                    else:  # UserReport object
+                        start_date = getattr(res, "start_at", None)
+                        if start_date:
+                            response_text = (
+                                f"Cycle started on {start_date.strftime('%d/%m/%Y')}"
+                                if hasattr(start_date, "strftime")
+                                else f"Cycle started on {start_date}"
+                            )
+                        else:
+                            response_text = "Cycle start date not available."
+
+                elif verb == "end":
+                    if isinstance(res, str):
+                        response_text = res
+                    elif isinstance(res, dict):
+                        if isinstance(res.get("result"), str):
+                            response_text = res["result"]
+                        else:
+                            end_date = res.get("end_at")
+                            if end_date:
+                                response_text = (
+                                    f"Cycle ended on {end_date.strftime('%d/%m/%Y')}"
+                                    if hasattr(end_date, "strftime")
+                                    else f"Cycle ended on {end_date}"
+                                )
+                            else:
+                                response_text = "Cycle end date not available."
+
+                    else:  # UserReport object
+                        end_date = getattr(res, "end_at", None)
+                        if end_date:
+                            response_text = (
+                                f"Cycle ended on {end_date.strftime('%d/%m/%Y')}"
+                                if hasattr(end_date, "strftime")
+                                else f"Cycle ended on {end_date}"
+                            )
+                        else:
+                            response_text = "Cycle end date not available."
+
+                            
+                elif verb == "show":
                     result = bot_response.get("result", [])
                     if not result:
                         response_text = "No cycles found."
@@ -510,6 +549,7 @@ class LunaApp:
                                 f"{idx}. Cycle {idx} starts at {start} and ends at {end}"
                             )
                         response_text = "Cycles:\n" + "\n".join(formatted_cycles)
+                        
             elif bot_response.get("type") == "SpecificPhraseOp":
                 response_text = bot_response["result"]
                 phrase = bot_response["phrase"]
@@ -527,12 +567,15 @@ class LunaApp:
                         response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. {bot_response['result']['reminder']}"
                     else:
                         response_text = f"Period range date: {bot_response['result']['start_at']} to {bot_response['result']['end_at']}. You are also expected to experiece the second period from {bot_response['result']['second_start_at']} to {bot_response['result']['second_end_at']}. {bot_response['result']['reminder']}"
+            
             elif bot_response.get("type") == "CycleStatusOp":
                 response_text = f"Cycle status on {bot_response['time'].strftime('%d/%m/%Y')}: {bot_response['result']}"
+
             elif bot_response.get("type") == "CheckOp":
-                response_text = f"Average cycle length is {bot_response['result']["cycle_length"]} and average period length is {bot_response['result']["period_length"]}. {bot_response['result']['reminder']}"
+                response_text = f"Average cycle length is {bot_response['result']['cycle_length']} and average period length is {bot_response['result']['period_length']}. {bot_response['result']['reminder']}"
+            
             elif bot_response.get("type") == "SympOp":
-                response_text = f"{bot_response['result']["reminder"]}"
+                response_text = f"{bot_response['result']['reminder']}"
         else:
             response_text = str(bot_response)
 
