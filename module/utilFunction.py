@@ -67,7 +67,7 @@ class utilFunction:
             diff_days = (curr_start.date() - prev_start.date()).days
             start_diffs.append(diff_days)
 
-        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 29
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 29 # mean cycle length of 2 nearest cycles
         self.cache['cycle_length'] = mean_start_diff
 
         # Ovulation usually happens 14 days before the next period
@@ -83,7 +83,7 @@ class utilFunction:
 
         return f"Initialized cache: period_length={mean_duration:.1f}, cycle_length={mean_start_diff:.1f}"
 
-
+    # symptom logging
     def getSymp (self, listOfSymp):
         now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
@@ -127,6 +127,7 @@ class utilFunction:
                 "reminder": f"You are currently not in your period. If you're experiencing {result} now, it could be due to other causes such as ovulation, stress, digestive issues, or underlying conditions like IBS, hormonal imbalance, or infections."
             }
 
+    # check cycle statistic
     def checkStatistic(self):
         period_length = self.cache.get('period_length', 5)
         cycle_length = self.cache.get('cycle_length', 29)
@@ -162,7 +163,8 @@ class utilFunction:
             "period_length": round(period_length, 2),
             "reminder": reminder
         }
-        
+    
+    # cycle status on date
     def getCycleStatusOnDate(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
             sort=[("start_at", DESCENDING)]
@@ -199,6 +201,7 @@ class utilFunction:
         else:
             return "non-fertile"
 
+    # show period cycle
     def getPeriodCycle(self):
         return list(
             self.databaseCon.db["user_reports"]
@@ -207,7 +210,7 @@ class utilFunction:
             .limit(3)
         )
 
-
+    # start date
     def requireStart(self, date):
         user_report = UserReport(
             start_at=date, end_at=date + timedelta(days=self.cache.get('period_length'))
@@ -216,6 +219,7 @@ class utilFunction:
         self.initPeriodForMonth()
         return user_report
 
+    # end date
     def requireEnd(self, date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
             sort=[("start_at", DESCENDING)]
@@ -227,7 +231,6 @@ class utilFunction:
         if isinstance(start_at, str):
             start_at = datetime.fromisoformat(start_at)
 
-        # check end < start
         if date < start_at:
             return {
                 "type": "RequireOp",
@@ -244,6 +247,7 @@ class utilFunction:
             _id=latest_report["_id"], start_at=start_at, end_at=date
         )
 
+    # get non-fertile days (predicted)
     def getNonFertileRangeByTime(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
@@ -266,7 +270,9 @@ class utilFunction:
             predicted_start += timedelta(days=cycle_length)
 
         predicted_end = predicted_start + timedelta(days=period_length)
-        ovulation = predicted_start + relativedelta(months=1) - timedelta (days = self.cache.get ("ovulation_offset"))
+        # ovulation = predicted_start + relativedelta(months=1) - timedelta (days = self.cache.get ("ovulation_offset"))
+        ovulation = predicted_start + timedelta(days=self.cache.get("ovulation_offset"))
+
         fertile_start = ovulation - timedelta(days=5)
         fertile_end = ovulation + timedelta(days=1)
         non_fertile_ranges = [
@@ -283,6 +289,7 @@ class utilFunction:
             "reminder": "During non-fertile days—the times outside your fertile window and menstruation—your chance of pregnancy is lower but not zero, especially if your cycle is irregular. It’s still important to maintain regular contraception if you want to avoid pregnancy. Use this time to focus on overall health: stay active, eat well, and manage stress. Keep tracking your cycle to better understand your body and prepare for upcoming fertile or period days.",
         }
 
+    # get period days (in past months -> retrieve DB)
     def getPeriodRangeFromDB(self, date: datetime):
         """
         Retrieve actual recorded period ranges from MongoDB for a given past month.
@@ -378,6 +385,7 @@ class utilFunction:
             )
         }
 
+    # get period days (predicted)
     def getPeriodRangeByTime(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
@@ -436,7 +444,7 @@ class utilFunction:
         }
 
 
-    
+    # get ovulation days (predicted)
     def getOvulationRangeByTime(self,date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
@@ -454,7 +462,8 @@ class utilFunction:
         period_length = self.cache.get("period_length")
 
             # Keep adding cycle_length days until we pass the given date
-        ovupredict = start_at-timedelta(days = self.cache.get ("ovulation_offset"))
+        # ovupredict = start_at-timedelta(days = self.cache.get ("ovulation_offset"))
+        ovupredict = start_at + timedelta(days = self.cache.get ("ovulation_offset"))
         while ovupredict <= date:
             ovupredict += timedelta(days=cycle_length)
         if (ovupredict + timedelta (days=cycle_length) < date + relativedelta(months=1)):
@@ -472,6 +481,7 @@ class utilFunction:
             "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
         }
     
+    # get fertile days (predicted)
     def getFertileRangeByTime (self, date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
