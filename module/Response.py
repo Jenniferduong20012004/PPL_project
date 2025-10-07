@@ -57,6 +57,8 @@ class Response:
             # if parsing failed, return random fallback response
             return self.get_fallback_response()
         else:
-            # if parsing succeeded, generate AST and execute operations
             result = tree.accept(self.astGeneration)
+            # # Check if AST returned structured error
+            # if isinstance(result, dict) and result.get("type") == "Error":
+            #     return result
             return result

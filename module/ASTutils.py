@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import List, Tuple
 from datetime import datetime
 from module.utilFunction import utilFunction
+
 class SympOp:
     def __init__(self, listSymp):
         self.utilFunction = utilFunction()
@@ -15,6 +16,7 @@ class SympOp:
             "type": "SympOp",
             "result": self.result,
         }
+    
 class CheckOp:
     def __init__(self):
         self.utilFunction = utilFunction()
@@ -26,6 +28,7 @@ class CheckOp:
             "type": "CheckOp",
             "result": self.result,
         }
+    
 class CycleStatusOp:
     def __init__(self, time):
         self.time = time
@@ -42,7 +45,6 @@ class CycleStatusOp:
     def action(self):
         self.result = self.utilFunction.getCycleStatusOnDate(self.time)
 
-
 class SpecificPhraseOp:
     def __init__(self, phrase, time):
         self.phrase = phrase
@@ -51,6 +53,8 @@ class SpecificPhraseOp:
         self.result = None
 
     def action(self):
+        now = datetime.now()
+
         if self.phrase == "ovulation":
             self.result = self.utilFunction.getOvulationRangeByTime(self.time)
         elif self.phrase == "fertile":
@@ -58,7 +62,10 @@ class SpecificPhraseOp:
         elif self.phrase == "non-fertile":
             self.result = self.utilFunction.getNonFertileRangeByTime(self.time)
         elif self.phrase == "period":
-            self.result = self.utilFunction.getPeriodRangeByTime(self.time)
+            if self.time < now:
+                self.result = self.utilFunction.getPeriodRangeFromDB(self.time)
+            else:
+                self.result = self.utilFunction.getPeriodRangeByTime(self.time)
 
     def to_dict(self):
         return {

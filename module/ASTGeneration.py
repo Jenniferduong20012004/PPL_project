@@ -12,8 +12,10 @@ from dateutil.relativedelta import relativedelta
 
 
 class ASTGeneration(FluVisitor):
+
     def visitProgram(self, ctx: FluParser.ProgramContext):
         return ctx.sentence().accept(self)
+    
     def visitSentence(self, ctx: FluParser.SentenceContext):
         if ctx.ask():
             return ctx.ask().accept(self)
@@ -23,12 +25,14 @@ class ASTGeneration(FluVisitor):
             return ctx.checkStats().accept(self)
         elif ctx.symptom().accept (self):
             return ctx.symptom().accept(self)
+        
     def visitSymptom(self, ctx: FluParser.SymptomContext):
         if ctx.symp():
             listSymp = ctx.symp().accept(self)
             symp = SympOp(listSymp)
             symp.action()
             return symp.to_dict()
+        
     def visitSymp(self, ctx: FluParser.SympContext):
         symptoms = []
         listOfSymp = None
@@ -63,6 +67,7 @@ class ASTGeneration(FluVisitor):
             phrase = "period"
         elif ctx.NONF():
             phrase = "non-fertile"
+            
         date = ctx.dateMonth().accept(self)
         specific = SpecificPhraseOp(phrase, date)
         specific.action()
@@ -75,7 +80,7 @@ class ASTGeneration(FluVisitor):
             return ctx.monthWord().accept(self)
 
     def visitMonthWord(self, ctx: FluParser.MonthWordContext):
-        month = ctx.WHEN().getText().lower
+        month = ctx.WHEN().getText().lower()
         now = datetime.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         if month == "previous":
             now = now - relativedelta(months=1)
@@ -107,6 +112,10 @@ class ASTGeneration(FluVisitor):
     def visitRequire(self, ctx: FluParser.RequireContext):
         verb = ctx.verb().accept(self)
         date = ctx.date().accept(self) if ctx.date() else None
+
+        if isinstance(date, dict) and date.get("type") == "Error":
+            return date
+        
         require = RequireOp(verb, date)
         require.action()
         result = require.to_dict()
@@ -129,10 +138,16 @@ class ASTGeneration(FluVisitor):
             return ctx.dateInWord().accept(self)
 
     def visitDateInNum(self, ctx: FluParser.DateInNumContext):
-        day = int(ctx.NUMBER(0).getText())
-        month = int(ctx.NUMBER(1).getText())
-        year = int(ctx.NUMBER(2).getText())
-        return datetime(year, month, day)
+        try:
+            day = int(ctx.NUMBER(0).getText())
+            month = int(ctx.NUMBER(1).getText())
+            year = int(ctx.NUMBER(2).getText())
+            return datetime(year, month, day)
+        except ValueError:
+            return {
+                "type": "Error",
+                "result": "Invalid date: please check the day and month."
+            }
 
     def visitDateCompare(self, ctx: FluParser.DateCompareContext):
         beforeAfter = ctx.BeforeAfter().getText().lower()

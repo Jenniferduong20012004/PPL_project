@@ -5,7 +5,7 @@ from module.UserReport import UserReport
 from pymongo import DESCENDING
 from dateutil.relativedelta import relativedelta
 import diskcache as dc
-
+from calendar import monthrange
 
 
 class utilFunction:
@@ -18,6 +18,72 @@ class utilFunction:
         self.fertile_start_offset = 10
         self.fertile_end_offset = 16
         self.ovulation_offset = 14
+        
+
+    def initPeriodForMonth(self):
+        latest_report = self.databaseCon.db["user_reports"].find_one(
+            sort=[("start_at", DESCENDING)]
+        )
+
+        if not latest_report or "start_at" not in latest_report:
+            self.cache['period_length'] = 5
+            self.cache['cycle_length'] = 29
+            self.cache['ovulation_offset'] = 14
+            self.cache['fertile_start_offset'] = 10
+            self.cache['fertile_end_offset']= 16
+            return "Quick reminder: You have not entered any period day into the system. Please add for calculation!"
+        
+        user_reports = self.databaseCon.db["user_reports"]
+        last_three_reports = list(
+            user_reports.find().sort("start_at", DESCENDING).limit(3)
+        )
+        last_three_reports.sort(key=lambda x: x['start_at'])
+
+        durations = []
+        for report in last_three_reports:
+            start = report['start_at']
+            end = report['end_at']
+            if not end:
+                continue
+            if isinstance(start, str):
+                start = datetime.fromisoformat(start)
+            if isinstance(end, str):
+                end = datetime.fromisoformat(end)
+            diff_days = (end.date() - start.date()).days + 1
+            durations.append(diff_days)
+
+        mean_duration = sum(durations) / len(durations) if durations else 5
+        self.cache['period_length'] = mean_duration
+
+        # print(cache['key'])     
+        start_diffs = []
+        for i in range(1, len(last_three_reports)):
+            prev_start = last_three_reports[i - 1]['start_at']
+            curr_start = last_three_reports[i]['start_at']
+            if isinstance(prev_start, str):
+                prev_start = datetime.fromisoformat(prev_start)
+            if isinstance(curr_start, str):
+                curr_start = datetime.fromisoformat(curr_start)
+            diff_days = (curr_start.date() - prev_start.date()).days
+            start_diffs.append(diff_days)
+
+        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 29
+        self.cache['cycle_length'] = mean_start_diff
+
+        # Ovulation usually happens 14 days before the next period
+        ovulation_offset = mean_start_diff - 14   # days after period starts
+
+        # Fertile window is 5-6 days ending on ovulation day
+        fertile_start_offset = ovulation_offset - 5  # 5 days before ovulation
+        fertile_end_offset = ovulation_offset        # ends at ovulation day
+
+        self.cache['ovulation_offset'] = ovulation_offset 
+        self.cache['fertile_start_offset'] = fertile_start_offset
+        self.cache['fertile_end_offset']= fertile_end_offset
+
+        return f"Initialized cache: period_length={mean_duration:.1f}, cycle_length={mean_start_diff:.1f}"
+
+
     def getSymp (self, listOfSymp):
         now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
@@ -46,96 +112,56 @@ class utilFunction:
         # Check if now is within the predicted period
         if predicted_start <= now <= predicted_end:
             return {
-                "reminder":f"You are currently in your period. {result} are common period symptoms, usually linked to PMS or primary dysmenorrhea. They’re caused by hormonal shifts, uterine contractions, and prostaglandins. If symptoms are severe, disrupt daily life, don’t improve with medication, or suddenly worsen, it may signal a condition like endometriosis or fibroids—see a doctor."
+                "recorded_date": now.strftime("%Y-%m-%d"),
+                "predicted_start": predicted_start.strftime("%Y-%m-%d"),
+                "predicted_end": predicted_end.strftime("%Y-%m-%d"),
+                "phase": "period",
+                "reminder": f"You are currently in your period. {result} are common period symptoms, usually linked to PMS or primary dysmenorrhea..."
             }
         else:
             return {
-                "reminder": f"You are currently not in your period. If you're experiencing {result} now, it could be due to other causes such as ovulation, stress, digestive issues, or underlying conditions like IBS, hormonal imbalance, or infections. If these symptoms are frequent, severe, or unusual for you, it's best to consult a healthcare provider for proper evaluation."
+                "recorded_date": now.strftime("%Y-%m-%d"),
+                "predicted_start": predicted_start.strftime("%Y-%m-%d"),
+                "predicted_end": predicted_end.strftime("%Y-%m-%d"),
+                "phase": "non-period",
+                "reminder": f"You are currently not in your period. If you're experiencing {result} now, it could be due to other causes such as ovulation, stress, digestive issues, or underlying conditions like IBS, hormonal imbalance, or infections."
             }
 
     def checkStatistic(self):
-        cycle_length = self.cache.get("cycle_length")
-        period_length = self.cache.get("period_length")
-        cycleNormal = True
-        periodNormal = True
-        if (cycle_length <21 or cycle_length > 35):
-            cycleNormal = False
-        if (period_length < 2 or period_length > 7):
-            periodNormal = False
-        reminder = None
-        if (cycleNormal and periodNormal):
-            reminder = "Your cycle falls within the normal range. A typical menstrual cycle lasts 21 to 35 days, with periods lasting 2 to 7 days. While most people have a 28-day cycle and bleed for 3 to 5 days, slight variations are perfectly normal."
-        elif (cycleNormal and not periodNormal):
-            if (periodNormal > 7):
-                reminder = "Your cycle is normal, but bleeding for over 7 days may indicate menorrhagia. This could be due to hormonal imbalances, fibroids, or other conditions. If your period consistently lasts 10 days or involves heavy bleeding, clots, or fatigue, consider seeing a healthcare provider."
-            else:
-                reminder = "Your cycle is normal, but your period is shorter than usual. Occasional short periods can result from stress, hormones, puberty, or birth control. If it’s consistent or unusually light, it could signal hormonal imbalance, spotting, or thyroid issues. One-time changes aren't usually a concern, but see a healthcare provider if it continues."
-        elif (not cycleNormal and periodNormal):
-            if (cycleNormal <21):
-                reminder = "Your period is normal, but a cycle shorter than 21 days may indicate polymenorrhea, meaning more frequent bleeding. Causes include hormonal imbalances, perimenopause, thyroid issues, stress, intense exercise, or low body weight. Occasional short cycles may be harmless, but if consistent, see a healthcare provider for evaluation."
-            else:
-                reminder = "Your period is normal, but a cycle longer than 35 days may indicate oligomenorrhea, or infrequent periods. Causes include PCOS, hormonal or thyroid issues, stress, weight changes, or perimenopause. Occasional delays may be lifestyle-related, but frequent irregular cycles should be checked by a healthcare provider."
+        period_length = self.cache.get('period_length', 5)
+        cycle_length = self.cache.get('cycle_length', 29)
+
+        cycleNormal = 21 <= cycle_length <= 35
+        periodNormal = 2 <= period_length <= 7
+
+        if cycleNormal and periodNormal:
+            reminder = (
+                "\nYour cycle falls within the normal range. "
+                "A typical menstrual cycle lasts 21 to 35 days, with periods lasting 2 to 7 days. "
+                "While most people have a 28-day cycle and bleed for 3 to 5 days, slight variations are perfectly normal."
+            )
+        elif cycleNormal and not periodNormal:
+            if period_length > 7:
+                reminder = "\nYour cycle is normal, but bleeding for over 7 days may indicate menorrhagia..."
+            else:  # < 2
+                reminder = "\nYour cycle is normal, but your period is shorter than usual..."
+        elif not cycleNormal and periodNormal:
+            if cycle_length < 21:
+                reminder = "\nYour period is normal, but a cycle shorter than 21 days may indicate polymenorrhea..."
+            else:  # > 35
+                reminder = "\nYour period is normal, but a cycle longer than 35 days may indicate oligomenorrhea..."
         else:
-            reminder = "Both your cycle length and period duration fall outside the normal range. A typical cycle is 21–35 days with bleeding lasting 2–7 days. While some variation is normal, consistently irregular or unpredictable periods should be evaluated by a healthcare provider."
+            reminder = (
+                "\nBoth your cycle length and period duration fall outside the normal range. "
+                "A typical cycle is 21–35 days with bleeding lasting 2–7 days. "
+                "While some variation is normal, consistently irregular or unpredictable periods should be evaluated by a healthcare provider."
+            )
+
         return {
-            "cycle_length": cycle_length,
-            "period_length": period_length,
+            "cycle_length": round(cycle_length, 2),
+            "period_length": round(period_length, 2),
             "reminder": reminder
         }
-    def initPeriodForMonth(self):
-        latest_report = self.databaseCon.db["user_reports"].find_one(
-            sort=[("start_at", DESCENDING)]
-        )
-        if not latest_report or "start_at" not in latest_report:
-            self.cache['period_length'] = 5
-            self.cache['cycle_length'] = 29
-            self.cache['ovulation_offset'] = 14
-            self.cache['fertile_start_offset'] = 10
-            self.cache['fertile_end_offset']= 16
-            return "Quick reminder: You have not entered any period day into the system. Please add for calculation!"
-        user_reports = self.databaseCon.db["user_reports"]
-        last_three_reports = list(
-            user_reports.find().sort("start_at", DESCENDING).limit(3)
-        )
-        last_three_reports.sort(key=lambda x: x['start_at'])
-        durations = []
-        for report in last_three_reports:
-            start = report['start_at']
-            end = report['end_at']
-            if isinstance(start, str):
-                start = datetime.fromisoformat(start)
-            if isinstance(end, str):
-                end = datetime.fromisoformat(end)
-            diff_days = (end.date() - start.date()).days
-            durations.append(diff_days)
-
-        mean_duration = sum(durations) / len(durations) if durations else 5
-        self.cache['period_length'] = mean_duration  # Store
-        # print(cache['key'])     
-        start_diffs = []
-        for i in range(1, len(last_three_reports)):
-            prev_start = last_three_reports[i - 1]['start_at']
-            curr_start = last_three_reports[i]['start_at']
-            if isinstance(prev_start, str):
-                prev_start = datetime.fromisoformat(prev_start)
-            if isinstance(curr_start, str):
-                curr_start = datetime.fromisoformat(curr_start)
-            diff_days = (curr_start.date() - prev_start.date()).days
-            start_diffs.append(diff_days)
-
-        mean_start_diff = sum(start_diffs) / len(start_diffs) if start_diffs else 29
-        self.cache['cycle_length'] = mean_start_diff  # Store
-        # Ovulation usually happens 14 days before the next period
-        ovulation_offset = mean_start_diff - 14   # days after period starts
-
-        # Fertile window is 5-6 days ending on ovulation day
-        fertile_start_offset = ovulation_offset - 5  # 5 days before ovulation
-        fertile_end_offset = ovulation_offset        # ends at ovulation day
-
-        self.cache['ovulation_offset'] = ovulation_offset 
-        self.cache['fertile_start_offset'] = fertile_start_offset
-        self.cache['fertile_end_offset']= fertile_end_offset
-
         
     def getCycleStatusOnDate(self, date: datetime):
         latest_report = self.databaseCon.db["user_reports"].find_one(
@@ -187,6 +213,7 @@ class utilFunction:
             start_at=date, end_at=date + timedelta(days=self.cache.get('period_length'))
         )
         user_report.save_to_db()
+        self.initPeriodForMonth()
         return user_report
 
     def requireEnd(self, date):
@@ -212,12 +239,12 @@ class utilFunction:
         self.databaseCon.db["user_reports"].update_one(
             {"_id": latest_report["_id"]}, {"$set": {"end_at": date}}
         )
+        self.initPeriodForMonth()
         return UserReport(
             _id=latest_report["_id"], start_at=start_at, end_at=date
         )
 
     def getNonFertileRangeByTime(self, date: datetime):
-        now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
         )
@@ -256,8 +283,102 @@ class utilFunction:
             "reminder": "During non-fertile days—the times outside your fertile window and menstruation—your chance of pregnancy is lower but not zero, especially if your cycle is irregular. It’s still important to maintain regular contraception if you want to avoid pregnancy. Use this time to focus on overall health: stay active, eat well, and manage stress. Keep tracking your cycle to better understand your body and prepare for upcoming fertile or period days.",
         }
 
+    def getPeriodRangeFromDB(self, date: datetime):
+        """
+        Retrieve actual recorded period ranges from MongoDB for a given past month.
+        Used when user asks about 'last month', '2 months before', or specific past months.
+        """
+
+        start_of_month = datetime(date.year, date.month, 1)
+        end_of_month = (start_of_month + relativedelta(months=1)) - timedelta(days=1)
+
+        reports = list(self.databaseCon.db["user_reports"].find({
+            "$or": [
+                {
+                    "start_at": {"$lte": end_of_month},
+                    "end_at": {"$gte": start_of_month}
+                }
+            ]
+        }).sort("start_at", DESCENDING))
+
+        if not reports:
+            next_report = self.databaseCon.db["user_reports"].find_one(
+                {"start_at": {"$gt": end_of_month}},
+                sort=[("start_at", 1)]
+            )
+            if next_report:
+                next_start = next_report["start_at"]
+                next_end = next_report.get("end_at", next_start + timedelta(days=self.cache.get("period_length", 5)))
+                return {
+                    "start_at": None,
+                    "end_at": None,
+                    "second_start_at": next_start.strftime("%d/%m/%Y"),
+                    "second_end_at": next_end.strftime("%d/%m/%Y"),
+                    "reminder": (
+                        f"\n\nNo recorded period found for {calendar.month_name[date.month]} {date.year}. "
+                        f"The next recorded period begins on {next_start.strftime('%d/%m/%Y')} "
+                        f"and ends on {next_end.strftime('%d/%m/%Y')}."
+                    )
+                }
+            return {
+                "start_at": None,
+                "end_at": None,
+                "second_start_at": None,
+                "second_end_at": None,
+                "reminder": (
+                    f"\n\nNo recorded period found for {calendar.month_name[date.month]} {date.year}. "
+                    "You might not have logged any data for that time."
+                )
+            }
+
+        results = []
+        for r in reports:
+            start_at = r["start_at"]
+            end_at = r["end_at"]
+
+            if isinstance(start_at, str):
+                start_at = datetime.fromisoformat(start_at)
+            if isinstance(end_at, str):
+                end_at = datetime.fromisoformat(end_at)
+
+            if start_at <= end_of_month and end_at >= start_of_month:
+                results.append((start_at, end_at))
+
+        if not results:
+            return {
+                "start_at": None,
+                "end_at": None,
+                "second_start_at": None,
+                "second_end_at": None,
+                "reminder": (
+                    f"\n\nNo period recorded in {calendar.month_name[date.month]} {date.year}. "
+                    "Try checking your recent months."
+                )
+            }
+
+        primary = results[0]
+        start_fmt = primary[0].strftime("%d/%m/%Y")
+        end_fmt = primary[1].strftime("%d/%m/%Y")
+
+        second_start_fmt = second_end_fmt = None
+        if len(results) > 1:
+            second_start_fmt = results[1][0].strftime("%d/%m/%Y")
+            second_end_fmt = results[1][1].strftime("%d/%m/%Y")
+
+
+        return {
+            "start_at": start_fmt,
+            "end_at": end_fmt,
+            "second_start_at": second_start_fmt,
+            "second_end_at": second_end_fmt,
+            "reminder": (
+                f"\n\nYour recorded period in {calendar.month_name[date.month]} {date.year} "
+                f"was from {start_fmt} to {end_fmt}. "
+                "Remember to keep logging your cycles for better tracking accuracy."
+            )
+        }
+
     def getPeriodRangeByTime(self, date: datetime):
-        now = datetime.now()
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]
         )
@@ -279,6 +400,22 @@ class utilFunction:
             predicted_start += timedelta(days=cycle_length)
 
         predicted_end = predicted_start + timedelta(days=period_length)
+
+        asked_month = date.month
+        asked_year = date.year
+
+        if predicted_start.month != asked_month or predicted_start.year != asked_year:
+            predicted_end = predicted_start + timedelta(days=period_length)
+            return {
+                "start_at": predicted_start.strftime("%d/%m/%Y"),
+                "end_at": predicted_end.strftime("%d/%m/%Y"),
+                "second_start_at": None,
+                "second_end_at": None,
+                "reminder": (
+                    f"\n\nNo period is expected to start in {calendar.month_name[asked_month]} {asked_year}. "
+                ),
+            }
+        
         if (predicted_start + timedelta (days=cycle_length) < date + relativedelta(months=1)):
             second_period = predicted_start + timedelta (days=cycle_length)
             second_period_end = second_period + timedelta(days=period_length)
@@ -287,7 +424,7 @@ class utilFunction:
                 "end_at": predicted_end.strftime("%d/%m/%Y"),
                 "second_start_at": second_period.strftime("%d/%m/%Y"),
                 "second_end_at": second_period_end.strftime("%d/%m/%Y"),
-                "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
+                "reminder": "\n\nDuring your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
             }
 
         return {
@@ -295,7 +432,7 @@ class utilFunction:
                 "end_at": predicted_end.strftime("%d/%m/%Y"),
                 "second_start_at": None,
                 "second_end_at": None,
-                "reminder": "During your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
+                "reminder": "\n\nDuring your period, it's important to maintain good hygiene by changing sanitary products regularly to prevent infections. Stay hydrated, get enough rest, and manage any cramps or discomfort with gentle exercise, heat packs, or pain relief if needed. Eating balanced meals and avoiding excessive caffeine or salty foods can help reduce bloating and mood swings. While fertility is low during menstruation, remember that cycle lengths vary, so pregnancy is still possible if you have a short cycle. Listening to your body and practicing self-care during this time supports overall well-being.",
         }
 
 
@@ -334,6 +471,7 @@ class utilFunction:
             "second_ovulation_day": None,
             "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
         }
+    
     def getFertileRangeByTime (self, date):
         latest_report = self.databaseCon.db["user_reports"].find_one(
                 sort=[("start_at", DESCENDING)]

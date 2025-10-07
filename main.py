@@ -572,10 +572,12 @@ class LunaApp:
                 response_text = f"Cycle status on {bot_response['time'].strftime('%d/%m/%Y')}: {bot_response['result']}"
 
             elif bot_response.get("type") == "CheckOp":
-                response_text = f"Average cycle length is {bot_response['result']['cycle_length']} and average period length is {bot_response['result']['period_length']}. {bot_response['result']['reminder']}"
+                response_text = f"Average cycle length is {bot_response['result']['cycle_length']} days and average period length is {bot_response['result']['period_length']} days. {bot_response['result']['reminder']}"
             
             elif bot_response.get("type") == "SympOp":
                 response_text = f"{bot_response['result']['reminder']}"
+            elif bot_response.get("type") == "Error":
+                response_text = bot_response["result"]
         else:
             response_text = str(bot_response)
 
