@@ -178,25 +178,33 @@ class utilFunction:
         elif isinstance(start_at, dict) and "$date" in start_at:
             start_at = datetime.fromisoformat(start_at["$date"])
 
+        cycle_length = self.cache.get('cycle_length')
+        period_length = self.cache.get('period_length')
+        fertile_start_offset = self.cache.get('fertile_start_offset')
+        fertile_end_offset = self.cache.get('fertile_end_offset')
+        ovulation_offset = self.cache.get('ovulation_offset')
+
+        # ✅ chỉ lặp khi date > kết thúc của chu kỳ hiện tại
         current_cycle_start = start_at
-        while current_cycle_start + timedelta(days=self.cache.get('cycle_length')) < date:
-            current_cycle_start += timedelta(days=self.cache.get('cycle_length'))
+        while date > current_cycle_start + timedelta(days=cycle_length - 1):
+            current_cycle_start += timedelta(days=cycle_length)
 
         period_range = (
             current_cycle_start,
-            current_cycle_start + timedelta(days=self.cache.get('period_length') - 1),
+            current_cycle_start + timedelta(days=period_length - 1),
         )
         fertile_range = (
-            current_cycle_start + timedelta(days=self.cache.get('fertile_start_offset')),
-            current_cycle_start + timedelta(days=self.cache.get('fertile_end_offset')),
+            current_cycle_start + timedelta(days=fertile_start_offset),
+            current_cycle_start + timedelta(days=fertile_end_offset),
         )
-        ovulation_date = current_cycle_start + timedelta(days=self.cache.get('ovulation_offset'))
+        ovulation_date = current_cycle_start + timedelta(days=ovulation_offset)
 
-        if period_range[0] <= date <= period_range[1]:
+        # ✅ cho phép ±1 ngày lệch
+        if abs((date - ovulation_date).days) <= 0:
+            return "ovulation"
+        elif period_range[0] <= date <= period_range[1]:
             return "period"
         elif fertile_range[0] <= date <= fertile_range[1]:
-            if ovulation_date == date:
-                return "ovulation"
             return "fertile"
         else:
             return "non-fertile"
@@ -247,48 +255,6 @@ class utilFunction:
             _id=latest_report["_id"], start_at=start_at, end_at=date
         )
 
-    # get non-fertile days (predicted)
-    def getNonFertileRangeByTime(self, date: datetime):
-        latest_report = self.databaseCon.db["user_reports"].find_one(
-                sort=[("start_at", DESCENDING)]
-        )
-        if not latest_report or "end_at" not in latest_report:
-            return None
-
-        start_at = latest_report["start_at"]
-        if isinstance(start_at, str):
-            start_at = datetime.strptime(start_at, "%Y-%m-%d")
-        elif isinstance(start_at, dict) and "$date" in start_at:
-            start_at = datetime.fromisoformat(start_at["$date"])
-
-        cycle_length = self.cache.get("cycle_length")
-        period_length = self.cache.get("period_length")
-
-            # Keep adding cycle_length days until we pass the given date
-        predicted_start = start_at
-        while predicted_start <= date:
-            predicted_start += timedelta(days=cycle_length)
-
-        predicted_end = predicted_start + timedelta(days=period_length)
-        # ovulation = predicted_start + relativedelta(months=1) - timedelta (days = self.cache.get ("ovulation_offset"))
-        ovulation = predicted_start + timedelta(days=self.cache.get("ovulation_offset"))
-
-        fertile_start = ovulation - timedelta(days=5)
-        fertile_end = ovulation + timedelta(days=1)
-        non_fertile_ranges = [
-            (predicted_start, fertile_start - timedelta(days=1)),  # Before fertile window
-            (fertile_end + timedelta(days=1), predicted_start + timedelta(days=cycle_length - 1))  # After fertile window
-        ]
-
-
-        return {
-            "start_at": non_fertile_ranges[0][0].strftime("%d/%m/%Y"),
-            "end_at": non_fertile_ranges[0][1].strftime("%d/%m/%Y"),
-            "start_at_2": non_fertile_ranges[1][0].strftime("%d/%m/%Y"),
-            "end_at_2": non_fertile_ranges[1][1].strftime("%d/%m/%Y"),
-            "reminder": "During non-fertile days—the times outside your fertile window and menstruation—your chance of pregnancy is lower but not zero, especially if your cycle is irregular. It’s still important to maintain regular contraception if you want to avoid pregnancy. Use this time to focus on overall health: stay active, eat well, and manage stress. Keep tracking your cycle to better understand your body and prepare for upcoming fertile or period days.",
-        }
-
     # get period days (in past months -> retrieve DB)
     def getPeriodRangeFromDB(self, date: datetime):
         """
@@ -327,6 +293,17 @@ class utilFunction:
                         f"and ends on {next_end.strftime('%d/%m/%Y')}."
                     )
                 }
+            # fallback to predict cycles if not have data, but have previous data
+
+            predicted = self.getPeriodRangeByTime(date)
+            if predicted:
+                predicted["reminder"] = (
+                    f"\n\nAs no recorded period found for {calendar.month_name[date.month]} {date.year}, "
+                    "this is a predicted period based on your previous cycles.\n" +
+                    predicted["reminder"]
+                )
+                return predicted
+        
             return {
                 "start_at": None,
                 "end_at": None,
@@ -378,11 +355,7 @@ class utilFunction:
             "end_at": end_fmt,
             "second_start_at": second_start_fmt,
             "second_end_at": second_end_fmt,
-            "reminder": (
-                f"\n\nYour recorded period in {calendar.month_name[date.month]} {date.year} "
-                f"was from {start_fmt} to {end_fmt}. "
-                "Remember to keep logging your cycles for better tracking accuracy."
-            )
+            "reminder": "Remember to keep logging your cycles for better tracking accuracy."
         }
 
     # get period days (predicted)
@@ -471,14 +444,14 @@ class utilFunction:
             return {
                 "ovulation_day": ovupredict.strftime("%d/%m/%Y"),
                 "second_ovulation_day": second_ovulation.strftime("%d/%m/%Y"),
-                "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
+                "reminder": "\n\nDuring ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
             }
 
 
         return {
             "ovulation_day": ovupredict.strftime("%d/%m/%Y"),
             "second_ovulation_day": None,
-            "reminder": "During ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
+            "reminder": "\n\nDuring ovulation, your body releases an egg, making this the peak fertile day with the highest chance of conception. Pay attention to signs like increased cervical mucus, mild pelvic pain, or a slight rise in basal body temperature. If you’re trying to conceive, having intercourse on this day or the days leading up to it boosts your chances. If avoiding pregnancy, use reliable contraception, as ovulation is when you’re most likely to get pregnant. Staying hydrated and managing any discomfort can also help you feel your best during this time.",
         }
     
     # get fertile days (predicted)
@@ -496,20 +469,75 @@ class utilFunction:
             start_at = datetime.fromisoformat(start_at["$date"])
 
         cycle_length = self.cache.get("cycle_length")
-        period_length = self.cache.get("period_length")
-        predicted_start = start_at
-        while predicted_start <= date:
-            predicted_start += timedelta(days=cycle_length)
-        ovulation_day = predicted_start -timedelta(days = self.cache.get ("ovulation_offset"))
+        ovulation_offset = self.cache.get("ovulation_offset")
 
+        predicted_start = start_at
+        while predicted_start + timedelta(days=cycle_length) <= date:
+            predicted_start += timedelta(days=cycle_length)
+
+        # ovulation = start + offset
+        ovulation_day = predicted_start + timedelta(days=ovulation_offset)
         fertile_start = ovulation_day - timedelta(days=5)
         fertile_end = ovulation_day
 
         return {
             "start_at": fertile_start.strftime("%d/%m/%Y"),
             "end_at": fertile_end.strftime("%d/%m/%Y"),
-            "reminder": "During fertile days, typically around ovulation, a woman is most likely to conceive. If trying to get pregnant, this is the best time for unprotected sex, supported by a healthy lifestyle and tracking signs like cervical mucus or ovulation kits. If avoiding pregnancy, it's crucial to use protection, as this window is the riskiest for unplanned conception. Understanding your cycle and being mindful of your goals helps you make informed reproductive choices.",
+            "reminder": (
+                "\n\nDuring fertile days, typically around ovulation, a woman is most likely to conceive. "
+                "If trying to get pregnant, this is the best time for unprotected sex, supported by a healthy lifestyle "
+                "and tracking signs like cervical mucus or ovulation kits. If avoiding pregnancy, it's crucial to use protection, "
+                "as this window is the riskiest for unplanned conception. Understanding your cycle and being mindful of your goals "
+                "helps you make informed reproductive choices."
+            ),
         }
 
+    # get non-fertile days (predicted)
+    def getNonFertileRangeByTime(self, date: datetime):
+        latest_report = self.databaseCon.db["user_reports"].find_one(
+            sort=[("start_at", DESCENDING)]
+        )
+        if not latest_report or "end_at" not in latest_report:
+            return None
 
+        start_at = latest_report["start_at"]
+        if isinstance(start_at, str):
+            start_at = datetime.strptime(start_at, "%Y-%m-%d")
+        elif isinstance(start_at, dict) and "$date" in start_at:
+            start_at = datetime.fromisoformat(start_at["$date"])
 
+        cycle_length = self.cache.get("cycle_length")
+        period_length = self.cache.get("period_length")
+        ovulation_offset = self.cache.get("ovulation_offset")
+
+        current_cycle_start = start_at
+        while date > current_cycle_start + timedelta(days=cycle_length - 1):
+            current_cycle_start += timedelta(days=cycle_length)
+        next_cycle_start = current_cycle_start + timedelta(days=cycle_length)
+
+        period_start = current_cycle_start
+        period_end = period_start + timedelta(days=period_length - 1)
+        ovulation_day = current_cycle_start + timedelta(days=ovulation_offset)
+        fertile_start = ovulation_day - timedelta(days=5)
+        fertile_end = ovulation_day
+
+        # Non-fertile 1: after period_end date to fertile_start
+        non_fertile_1_start = period_end 
+        non_fertile_1_end = fertile_start - timedelta(days=1)
+
+        # Non-fertile 2: after fertile_end to next start os next cycle
+        non_fertile_2_start = fertile_end + timedelta(days=1)
+        non_fertile_2_end = next_cycle_start - timedelta(days=1)
+
+        return {
+            "start_at": non_fertile_1_start.strftime("%d/%m/%Y"),
+            "end_at": non_fertile_1_end.strftime("%d/%m/%Y"),
+            "start_at_2": non_fertile_2_start.strftime("%d/%m/%Y"),
+            "end_at_2": non_fertile_2_end.strftime("%d/%m/%Y"),
+            "reminder": (
+                "\n\nDuring non-fertile days — after your period and after ovulation — "
+                "the chance of pregnancy is very low, though not zero if cycles are irregular. "
+                "Keep using protection if avoiding pregnancy, and focus on wellness, "
+                "hydration, and tracking for upcoming fertile windows."
+            ),
+        }
